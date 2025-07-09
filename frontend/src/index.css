@@ -1,0 +1,120 @@
+@import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
+
+
+
+:root{
+    --dark-gray:#969696;
+    --heading-font: "Montserrat";
+    --content-font: "Poppins", sans-serif;
+    --light-gray:#A9A9A9;
+}
+
+.footer p{
+    color: var(--dark-gray);
+    font-family: var(--content-font);
+}
+
+.footer h1{
+    color: var(--dark-gray);
+    font-family: var(--content-font);
+    font-size: var(--text-xl);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.footer li{
+  margin-bottom: 3px;
+}
+
+.footer li:hover{
+  color: var(--light-gray);
+}
+
+.divider{
+  border: 0.5px solid var(--light-gray);
+}
+
+.page-container{
+  padding-top: 65px;
+}
+
+.table-detail th{
+  text-align: left;
+  padding-right: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.25rem 0.75rem; /* tương đương py-5 px-3 */
+  border-radius: 1rem;        /* rounded-2xl */
+  transition: all 0.3s ease;
+}
+
+/* Hover cho màn hình nhỏ */
+.menu-item:hover {
+  background-color: #fbbf24; /* amber-400 */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination li a {
+  font-family: var(--content-font);
+  width: 40px; /* Chiều rộng cố định */
+  height: 40px; /* Chiều cao cố định */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  border-radius: 50%; /* Bo tròn để tạo hình tròn */
+  color: var(--dark-gray);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Hiệu ứng chuyển đổi */
+}
+
+.pagination li.active a {
+  background-color: var(--color-amber-300); /* Màu nền cho nút đang chọn */
+  color: white;
+  border-color: var(--color-amber-300);
+  font-weight: bold; /* Làm chữ đậm */
+}
+
+.pagination li a:hover {
+  background-color: #ddd; /* Màu khi hover */ 
+  border-color: #ddd;
+}
+
+/* Hover riêng cho màn hình từ md trở lên (~768px) */
+@media (min-width: 768px) {
+  .menu-item:hover {
+    background-color: transparent;
+    color: var(--dark-gray)
+  }
+}
+
+@layer utilities {
+    .font-heading {
+      font-family: var(--heading-font);
+    }
+  
+    .font-content {
+      font-family: var(--content-font);
+    }
+  }
+  

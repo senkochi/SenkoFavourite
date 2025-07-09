@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "name": "Sewayaki Kitsune no Senko-san - Senko (Studio DeltaWave)",
+    "price": 100,
+    "image": "/images/product-1.jpg",
+    "slug": "sewayaki-kitsune-no-senko-san-senko-studio-deltawave",
+    "category": "figure",
+    "quantity": 5
+  },
+  {
+    "id": 2,
+    "name": "Nendoroid Sewayaki Kitsune no Senko-san: Senko",
+    "price": 200,
+    "image": "/images/product-2.jpg",
+    "slug": "nendoroid-sewayaki-kitsune-no-senko-san-senko",
+    "category": "figure",
+    "quantity": 0
+  },
+  {
+    "id": 3,
+    "name": "The Helpful Fox Senko-san - Senko 1/7 Scale PVC Figure (Myethos)",
+    "price": 300,
+    "image": "/images/product-3.jpg",
+    "slug": "the-helpful-fox-senko-san-senko-1-7-scale-pvc-figure-myethos",
+    "category": "figure",
+    "quantity": 2
+  },
+  {
+    "id": 4,
+    "name": "The Helpful Fox Senko-san Statue 1/7 Senko Maid Ver. 20 cm",
+    "price": 400,
+    "image": "/images/product-4.jpg",
+    "slug": "the-helpful-fox-senko-san-statue-1-7-senko-maid-ver-20-cm",
+    "category": "figure",
+    "quantity": 7
+  },
+  {
+    "id": 5,
+    "name": "Sewayaki Kitsune no Senko-san Vol.1",
+    "price": 100,
+    "image": "/images/Manga_Volume_1.jpg",
+    "slug": "sewayaki-kitsune-no-senko-san-vol-1",
+    "category": "manga",
+    "quantity": 10
+  },
+  {
+    "id": 6,
+    "name": "Sewayaki Kitsune no Senko-san Vol.2",
+    "price": 200,
+    "image": "/images/Manga_Volume_2.jpg",
+    "slug": "sewayaki-kitsune-no-senko-san-vol-2",
+    "category": "manga",
+    "quantity": 0
+  },
+  {
+    "id": 7,
+    "name": "Sewayaki Kitsune no Senko-san Vol.3",
+    "price": 300,
+    "image": "/images/Manga_Volume_3.jpg",
+    "slug": "sewayaki-kitsune-no-senko-san-vol-3",
+    "category": "manga",
+    "quantity": 3
+  },
+  {
+    "id": 8,
+    "name": "Sewayaki Kitsune no Senko-san Vol.4",
+    "price": 400,
+    "image": "/images/Manga_Volume_4.jpg",
+    "slug": "sewayaki-kitsune-no-senko-san-vol-4",
+    "category": "manga",
+    "quantity": 8
+  },
+  {
+    "id": 9,
+    "name": "The Helpful Fox Senko-san Puni Colle! Key Ring (with Stand) Senko-san",
+    "price": 100,
+    "image": "/images/Senko-keychain.jpg",
+    "slug": "the-helpful-fox-senko-san-puni-colle-key-ring-with-stand-senko-san",
+    "category": "clothing and accessories",
+    "quantity": 0
+  },
+  {
+    "id": 10,
+    "name": "The Helpful Fox Senko-san: Puni Colle! Keychain (with Stand) Shiro",
+    "price": 200,
+    "image": "/images/Shiro-keychain.jpg",
+    "slug": "the-helpful-fox-senko-san-puni-colle-keychain-with-stand-shiro",
+    "category": "clothing and accessories",
+    "quantity": 15
+  },
+  {
+    "id": 11,
+    "name": "The Helpful Fox Senko-san Cosplay Costumes Senko-san Kimono",
+    "price": 300,
+    "image": "/images/Senko-clothes.jpg",
+    "slug": "the-helpful-fox-senko-san-cosplay-costumes-senko-san-kimono",
+    "category": "clothing and accessories",
+    "quantity": 1
+  },
+  {
+    "id": 12,
+    "name": "Senko-teeee",
+    "price": 400,
+    "image": "/images/Senko-tee.jpg",
+    "slug": "senko-teeee",
+    "category": "clothing and accessories",
+    "quantity": 4
+  }
+]
