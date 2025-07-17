@@ -1,5 +1,4 @@
 package com.senko.SenkoFavourite.model;
 
-
-public class CartDetailKey {
+public class OrderDetail {
 }

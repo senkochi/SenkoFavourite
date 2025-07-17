@@ -4,11 +4,17 @@ public class SecurityEndpoints {
     public static final String frontendURL = "http://localhost:5173";
 
     public static final String[] GET_ENDPOINTS = {
-            
+            "/api/products",
+            "/api/products/**",
+            "/api/send-register-code",
+            "/api/test-email"
     };
 
     public static final String[] POST_ENDPOINTS = {
             "/api/login",
-            "/api/register"
+            "/api/register",
+            "/api/send-register-code",
+            "/api/send-recovery-code",
+            "/api/verify-code"
     };
 }

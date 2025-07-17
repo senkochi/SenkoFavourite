@@ -2,16 +2,13 @@ package com.senko.SenkoFavourite.service;
 
 import com.senko.SenkoFavourite.dto.ProductDTO;
 import com.senko.SenkoFavourite.mapper.ProductMapper;
-import com.senko.SenkoFavourite.model.Category;
 import com.senko.SenkoFavourite.model.Product;
 import com.senko.SenkoFavourite.repository.ProductRepository;
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,16 +28,32 @@ public class ProductService {
 
     public ProductDTO getBySlug(String slug){
         Product product = productRepository.findBySlug(slug).orElseThrow();
-        return productMapper.toDTO(product);
+        System.out.println("Id sản phẩm hiện tại là: " + product.getProductId());
+
+        return ProductDTO.builder()
+                .productId(product.getProductId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .releaseDate(product.getReleaseDate())
+                .size(product.getSize())
+                .copyRight(product.getCopyRight())
+                .quantity(product.getQuantity())
+                .material(product.getMaterial())
+                .imageURL(product.getImageURL())
+                .slug(product.getSlug())
+                .artist(product.getArtist())
+                .manufacturerName(product.getManufacturer().getName())
+                .categoryName(product.getCategory().getName())
+                .build();
     }
 
     public List<ProductDTO> getRelatedProducts(String slug){
         Product product = productRepository.findBySlug(slug).orElseThrow();
 
-        Long id = product.getId();
+        int id = product.getProductId();
 
-        List<Product> before = productRepository.findTop2ByCategoryAndIdLessThanOrderByIdAsc(product.getCategory(), id);
-        List<Product> after = productRepository.findTop2ByCategoryAndIdGreaterThanOrderByIdAsc(product.getCategory(), id);
+        List<Product> before = productRepository.findTop2ByCategoryAndProductIdLessThanOrderByProductIdAsc(product.getCategory(), id);
+        List<Product> after = productRepository.findTop2ByCategoryAndProductIdGreaterThanOrderByProductIdAsc(product.getCategory(), id);
 
         List<Product> result = new ArrayList<>();
         result.addAll(before);
@@ -49,9 +62,9 @@ public class ProductService {
         int needed = 5 - result.size();
         if (needed > 0) {
             List<Product> filler = productRepository
-                    .findTopNByCategoryAndIdNotIn(product.getCategory(), Stream.concat(
+                    .findTopNByCategoryAndProductIdNotIn(product.getCategory(), Stream.concat(
                             Stream.of(id),
-                            result.stream().map(Product::getId)
+                            result.stream().map(Product::getProductId)
                     ).collect(Collectors.toList()), PageRequest.of(0, needed));
 
             result.addAll(filler);

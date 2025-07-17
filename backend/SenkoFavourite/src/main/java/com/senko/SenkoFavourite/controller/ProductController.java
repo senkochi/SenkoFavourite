@@ -24,6 +24,7 @@ public class ProductController {
     @GetMapping("/{slug}")
     public ResponseEntity<?> getProductDTOBySlug(@PathVariable String slug){
         ProductDTO dto = productService.getBySlug(slug);
+        System.out.println("Id dto sản phẩm hiện tại là: " + dto.getProductId());
         return ResponseEntity.ok(dto);
     }
 

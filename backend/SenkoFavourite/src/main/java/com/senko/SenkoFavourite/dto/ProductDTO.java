@@ -1,9 +1,6 @@
 package com.senko.SenkoFavourite.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -11,8 +8,9 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProductDTO {
-    private int id;
+    private int productId;
     private String name;
     private double price;
     private LocalDate releaseDate;
