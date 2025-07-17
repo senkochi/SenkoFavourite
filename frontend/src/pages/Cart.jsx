@@ -1,39 +1,111 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useEffect } from "react";
+import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import Checkbox from "@mui/material/Checkbox";
 
 const Cart = () => {
   const [products, setProducts] = useState([]);
+  const { authState } = React.useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const subtotal = products.reduce((sum, product) => {
-    return sum + product.product_price * product.quantity;
+    if (!product.isChecked) return sum; // Only include checked products in subtotal
+    // Ensure product.price and product.quantity are defined
+    return sum + (product.price || 0) * (product.quantity || 0);
   }, 0);
 
-  const total = subtotal;
-
+  const shipping = 2 * products.filter(product => product.isChecked).length; // Assuming $2 shipping per product
+  const total = subtotal + shipping;
   const increase = (index) => {
     const newProducts = [...products];
     newProducts[index].quantity += 1;
     setProducts(newProducts);
+    handleAddToCart(newProducts[index].productId, 1);
   };
 
   const decrease = (index) => {
     const newProducts = [...products];
+    if (newProducts[index].quantity <= 1) return;
+    // Ensure quantity does not go below 1
     newProducts[index].quantity = Math.max(1, newProducts[index].quantity - 1);
     setProducts(newProducts);
+    // Only call handleAddToCart if quantity is greater than 1
+    handleAddToCart(newProducts[index].productId, -1);
   };
 
   useEffect(() => {
-    fetch("/cartDetail.json")
-      .then((response) => response.json())
-      .then((data) => {
-        // Gắn quantity mặc định = 1 vào mỗi sản phẩm
-        const productsWithQuantity = data.map((product) => ({
+    const fetchCartItems = async () => {
+      if (!authState.isAuthenticated) {
+        console.error("User is not authenticated");
+        return;
+      }
+      setLoading(true);
+      try {
+        const response = await axiosInstance.get("/api/cart");
+        const productWithChecked = response.data.map((product) => ({
           ...product,
-          quantity: 1,
+          isChecked: false
         }));
-        setProducts(productsWithQuantity);
+        setProducts(productWithChecked);
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCartItems();
+  }, [authState.isAuthenticated]);
+
+  const handleAddToCart = async (productId, quantity) => {
+    // Logic to add the product to the cart
+    setError(null);
+    try {
+      console.log(productId, quantity);
+      const response = await axiosInstance.post("/api/cart/add", {
+        productId,
+        quantity,
       });
-  }, []);
+      if (response.status === 200) {
+        console.log("Product added to cart:", response.data);
+      } else {
+        setError("Không thể thêm sản phẩm vào giỏ hàng.");
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+      setError("Không thể thêm sản phẩm vào giỏ hàng.");
+    }
+  };
+
+  const handleRemoveFromCart = async (productId) => {
+    try {
+      setLoading(true);
+      await axiosInstance.delete(`/api/cart/${productId}`);
+      setProducts(
+        products.filter((product) => product.productId !== productId)
+      );
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckboxChange = (productId) => (event) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.productId === productId
+          ? { ...product, isChecked: event.target.checked }
+          : product
+      )
+    );
+  };
 
   return (
     <div className="page-container">
@@ -47,22 +119,35 @@ const Cart = () => {
                 key={index}
               >
                 <div className="flex gap-6 sm:gap-4 max-sm:flex-col">
+                  <Checkbox
+                    disableRipple // Tắt ripple effect
+                    sx={{
+                      "&.Mui-checked": {
+                        color: "#FFB343", // Màu khi checkbox được chọn
+                      },
+                      "&:hover": {
+                        backgroundColor: "transparent", // Không có background hover
+                      },
+                    }}
+                    checked={product.isChecked}
+                    onChange={handleCheckboxChange(product.productId)}
+                  />
                   <div className="w-24 h-24 max-sm:w-24 max-sm:h-24 shrink-0">
                     <img
-                      src={product.product_image}
+                      src={product.imgURL}
                       className="w-full h-full object-contain"
-                      alt={product.product_name}
+                      alt={product.productName}
                     />
                   </div>
                   <div className="flex flex-col gap-4">
                     <div>
                       <h3 className="text-sm sm:text-base font-semibold text-slate-900">
-                        {product.product_name}
+                        {product.productName}
                       </h3>
                     </div>
                     <div className="mt-auto">
                       <h3 className="text-sm font-semibold text-slate-900">
-                        ${product.product_price}
+                        ${product.price}
                       </h3>
                     </div>
                   </div>
@@ -82,6 +167,7 @@ const Cart = () => {
                     </svg>
 
                     <svg
+                      onClick={() => handleRemoveFromCart(product.productId)}
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-4 h-4 cursor-pointer fill-slate-400 hover:fill-red-600 inline-block"
                       viewBox="0 0 24 24"
@@ -120,7 +206,9 @@ const Cart = () => {
                     </span>
                     <button
                       type="button"
-                      onClick={() => increase(index)}
+                      onClick={() => {
+                        increase(index);
+                      }}
                       className="flex items-center justify-center w-[18px] h-[18px] cursor-pointer bg-slate-800 outline-none rounded-full"
                     >
                       <svg
@@ -145,28 +233,24 @@ const Cart = () => {
               <li className="flex flex-wrap gap-4 text-sm">
                 Subtotal{" "}
                 <span className="ml-auto font-semibold text-slate-900">
-                  {subtotal}
+                  ${subtotal}.00
                 </span>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">
                 Shipping{" "}
                 <span className="ml-auto font-semibold text-slate-900">
-                  $2.00
+                  ${shipping}.00
                 </span>
               </li>
-              <li className="flex flex-wrap gap-4 text-sm">
-                Tax{" "}
-                <span className="ml-auto font-semibold text-slate-900">
-                  $4.00
-                </span>
-              </li>
+              
               <hr className="border-slate-300" />
               <li className="flex flex-wrap gap-4 text-sm font-semibold text-slate-900">
-                Total <span className="ml-auto">$206.00</span>
+                Total <span className="ml-auto">${total}.00</span>
               </li>
             </ul>
             <div className="mt-8 space-y-4">
               <button
+                onClick={() => navigate("/checkout", { state: { subtotal, shipping, total } })}
                 type="button"
                 className="text-sm px-4 py-2.5 w-full font-medium tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md cursor-pointer"
               >

@@ -1,8 +1,7 @@
 package com.senko.SenkoFavourite.controller;
 
-import com.senko.SenkoFavourite.dto.UserDTO;
-import com.senko.SenkoFavourite.model.Users;
-import com.senko.SenkoFavourite.service.UserService;
+import com.senko.SenkoFavourite.dto.AddressDTO;
+import com.senko.SenkoFavourite.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,15 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
-public class UserController {
+@RequestMapping("/api/address")
+public class AddressController {
     @Autowired
-    private UserService userService;
+    private AddressService addressService;
 
     @GetMapping
-    public ResponseEntity<?> getCurrentUser(){
+    public ResponseEntity<?> getAddressByUsername(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserDTO user = userService.getUserByUsername(username);
-        return ResponseEntity.ok(user);
+
+        AddressDTO dto = addressService.getAddressByUsername(username);
+        return ResponseEntity.ok(dto);
     }
 }

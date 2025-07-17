@@ -6,23 +6,25 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class CartDetail {
+public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_detail_id")
-    private int cartDetailId;
-
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @Column(name = "product_image_id")
+    private int productImageId;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
     @Column
-    private int quantity;
+    private String url;
+
+    @Column(name="alt_text")
+    private String altText;
+
+    @Column(name = "display_order")
+    private int displayOrder;
 }

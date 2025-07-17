@@ -1,29 +1,34 @@
 package com.senko.SenkoFavourite.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Cart {
-
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id")
-    private int cartId;
+    private int addressId;
 
-    @OneToOne
+    @Column
+    private String particular;
+
+    @Column
+    private String ward;
+
+    @Column
+    private String district;
+
+    @Column
+    private String province;
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;
 
-    @OneToMany(mappedBy = "cart")
-    private List<CartDetail> cartDetailList;
 
 }

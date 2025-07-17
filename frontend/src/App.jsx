@@ -10,6 +10,9 @@ import Footer from './components/Footer/Footer';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import LoginPage from './pages/LoginPage';
+import EmailVerification from './pages/EmailVerification';
+import Checkout from './pages/Checkout';
+import Profile from './pages/Profile';
 import { AuthContext } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { useContext } from 'react';
@@ -31,6 +34,9 @@ const App = () => {
             <Route path='/products/:slug' element={<ProductDetails />}></Route>
             <Route path='/cart' element={<Cart />}></Route>
             <Route path='/login' element={<LoginPage />}></Route>
+            <Route path='/verify-email' element={<EmailVerification />}></Route>
+            <Route path='/checkout' element={<Checkout />}></Route>
+            <Route path='/user/profile' element={<Profile />}></Route>
           </Routes>
           <Footer />
         

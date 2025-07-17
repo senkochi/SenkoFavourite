@@ -8,6 +8,9 @@ import StockStatus from "../components/StockStatus";
 import DetailAndFeedback from "../components/Product/DetailAndFeedback";
 import RelevantProduct from "../components/Product/RelevantProduct";
 import ProductCarousel from "../components/ProductCarousel";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
+import toast from "react-hot-toast";
 
 const ProductDetails = () => {
   const [product, setProduct] = useState(null);
@@ -56,6 +59,29 @@ const ProductDetails = () => {
       isMounted = false;
     };
   }, [slug]);
+
+  const handleAddToCart = async (e) => {
+    // Logic to add the product to the cart
+    setError(null);
+    try {
+       console.log(product.productId, quantity, product.name);
+      const response = await axiosInstance.post('/api/cart/add', {
+        productId: product.productId,
+        quantity,
+      });
+      console.log(product.productId, quantity);
+      if (response.status === 200) {
+        toast.success("Sản phẩm đã được thêm vào giỏ hàng!");
+        console.log('Product added to cart:', response.data);
+      } else {
+        setError("Không thể thêm sản phẩm vào giỏ hàng.");
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+      setError('Không thể thêm sản phẩm vào giỏ hàng.');
+    }
+  }
 
   useEffect(() => {
     return () => {
@@ -113,7 +139,7 @@ const ProductDetails = () => {
               ></NumberStepper>
             </div>
             <div>
-              <button className="md:w-50 w-full h-10 bg-yellow-300 rounded-full cursor-pointer hover:opacity-80 md:mr-5 mb-2">
+              <button onClick={handleAddToCart} className="md:w-50 w-full h-10 bg-yellow-300 rounded-full cursor-pointer hover:opacity-80 md:mr-5 mb-2">
                 Add to cart
               </button>
               <button className="md:w-50 w-full h-10 bg-orange-400 rounded-full cursor-pointer hover:opacity-80">

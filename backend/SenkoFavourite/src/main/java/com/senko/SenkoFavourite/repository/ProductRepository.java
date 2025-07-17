@@ -12,16 +12,17 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+public interface ProductRepository extends JpaRepository<Product, Integer>, JpaSpecificationExecutor<Product> {
     Optional<Product> findBySlug(String slug);
+    Product findByProductId(int productId);
     List<Product> findTop5ByCategoryAndSlugNot(Category category, String slug);
-    List<Product> findTop2ByCategoryAndIdLessThanOrderByIdAsc(Category category, Long id);
-    List<Product> findTop2ByCategoryAndIdGreaterThanOrderByIdAsc(Category category, Long id);
+    List<Product> findTop2ByCategoryAndProductIdLessThanOrderByProductIdAsc(Category category, Integer productId);
+    List<Product> findTop2ByCategoryAndProductIdGreaterThanOrderByProductIdAsc(Category category, Integer productId);
 
     @Query("SELECT p FROM Product p WHERE p.category = :category AND p.id NOT IN :excluded ORDER BY p.id DESC")
-    List<Product> findTopNByCategoryAndIdNotIn(
+    List<Product> findTopNByCategoryAndProductIdNotIn(
             @Param("category") Category category,
-            @Param("excluded") List<Long> excluded,
+            @Param("excluded") List<Integer> excluded,
             Pageable pageable
     );
 

@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import Logo from "../../assets/logo.jpg";
 import IonIcon from "@reacticons/ionicons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext } from "react";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { authState, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const handleCartClick = () => {
-    // Handle cart click logic here
-    console.log("Cart clicked");
-  }
   return (
     <div className="flex justify-between items-center bg-amber-200 fixed top-0 left-0 w-full z-50 shadow-lg font-heading">
       <div className="flex-shrink-0">
@@ -99,11 +96,16 @@ const Navbar = () => {
         <nav>
           {authState.isAuthenticated ? (
             <>
-              <span>Xin chào, {authState.user}</span>
+              <span onClick={() => navigate("/user/profile")}>Xin chào, {authState.user}</span>
               <button onClick={logout}>Đăng xuất</button>
             </>
           ) : (
-            <Link to="/login" className="btn btn-primary bg-orange-400 px-4 py-2 rounded-full hover:bg-orange-300 flex-shrink-0">Sign in</Link>
+            <Link
+              to="/login"
+              className="btn btn-primary bg-orange-400 px-4 py-2 rounded-full hover:bg-orange-300 flex-shrink-0"
+            >
+              Sign in
+            </Link>
           )}
         </nav>
         <div className="md:hidden">
@@ -114,9 +116,15 @@ const Navbar = () => {
           ></IonIcon>
         </div>
         <div>
+          {authState.isAuthenticated ? (
             <Link to={"/cart"}>
-                <IonIcon name="cart-outline" className="text-2xl"></IonIcon>
-            </Link> 
+              <IonIcon name="cart-outline" className="text-2xl"></IonIcon>
+            </Link>
+          ) : (
+            <Link to={"/login"}>
+              <IonIcon name="cart-outline" className="text-2xl"></IonIcon>
+            </Link>
+          )}
         </div>
       </div>
     </div>
