@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Overall from "./Overall";
 import Feedbacks from "./Feedbacks";
 
-const DetailAndFeedback = ({product}) => {
+const DetailAndFeedback = ({ product }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -39,24 +39,27 @@ const DetailAndFeedback = ({product}) => {
             <Box>
               <Typography component="div" sx={{ mt: 1 }}>
                 <table className="w-full table-detail">
-  <tbody>
-    {[
-      { label: "Manufacturer", value: product.manufacturerName },
-      { label: "Artist", value: product.artist },
-      { label: "Release date", value: product.releaseDate },
-      { label: "Size", value: product.size },
-      { label: "Material", value: product.material },
-      { label: "Copyright", value: product.copyRight },
-    ]
-      .filter(row => row.value) // Chỉ giữ lại các giá trị truthy (loại bỏ null, undefined, "")
-      .map((row, index) => (
-        <tr key={index}>
-          <th>{row.label}</th>
-          <td>{row.value}</td>
-        </tr>
-      ))}
-  </tbody>
-</table>
+                  <tbody>
+                    {[
+                      {
+                        label: "Manufacturer",
+                        value: product.manufacturerName,
+                      },
+                      { label: "Artist", value: product.artist },
+                      { label: "Release date", value: product.releaseDate },
+                      { label: "Size", value: product.size },
+                      { label: "Material", value: product.material },
+                      { label: "Copyright", value: product.copyRight },
+                    ]
+                      .filter((row) => row.value) // Chỉ giữ lại các giá trị truthy (loại bỏ null, undefined, "")
+                      .map((row, index) => (
+                        <tr key={index}>
+                          <th>{row.label}</th>
+                          <td>{row.value}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
               </Typography>
             </Box>
           )}

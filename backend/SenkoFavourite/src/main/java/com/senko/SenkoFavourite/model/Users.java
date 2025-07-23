@@ -45,6 +45,6 @@ public class Users {
     @JsonIgnore
     private Cart cart;  
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user")
     private Address address;
 }
