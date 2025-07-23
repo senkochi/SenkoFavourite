@@ -107,6 +107,56 @@ const Cart = () => {
     );
   };
 
+  const handleProceedToCheckout = () => {
+    const selectedProducts = products.filter(p => p.isChecked);
+
+    if (selectedProducts.length === 0) {
+      toast.error("Vui lòng chọn ít nhất một sản phẩm để thanh toán.");
+      return;
+    }
+
+    // Tạo danh sách OrderDetailDTO từ các sản phẩm đã chọn
+    const orderDetailList = selectedProducts.map(product => ({
+      productId: product.productId,
+      quantity: product.quantity,
+      // Bạn có thể thêm các trường khác nếu OrderDetailDTO của bạn có (ví dụ: priceAtTimeOfPurchase)
+      // price: product.price // Nếu backend cần giá tại thời điểm mua
+    }));
+
+    navigate('/checkout', {
+      state: {
+        subtotal,
+        shipping,
+        total,
+        orderDetailList: orderDetailList // Truyền danh sách sản phẩm đã chọn
+      }
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="page-container flex items-center justify-center h-screen">
+        <p className="text-xl font-semibold text-slate-900">Đang tải giỏ hàng...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page-container flex items-center justify-center h-screen">
+        <p className="text-xl text-red-600 font-semibold">{error}</p>
+      </div>
+    );
+  }
+
+  if (!products || products.length === 0) {
+    return (
+      <div className="page-container flex items-center justify-center h-screen">
+        <p className="text-xl font-semibold text-slate-900">Giỏ hàng của bạn trống.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="page-container">
       <div className="max-w-5xl max-lg:max-w-2xl mx-auto p-4">
@@ -250,7 +300,7 @@ const Cart = () => {
             </ul>
             <div className="mt-8 space-y-4">
               <button
-                onClick={() => navigate("/checkout", { state: { subtotal, shipping, total } })}
+                onClick={handleProceedToCheckout}
                 type="button"
                 className="text-sm px-4 py-2.5 w-full font-medium tracking-wide bg-slate-800 hover:bg-slate-900 text-white rounded-md cursor-pointer"
               >

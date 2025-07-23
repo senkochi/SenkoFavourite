@@ -13,16 +13,19 @@
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-alpha.8",
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/material": "^7.1.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.2.0",
+    "@mui/material": "^7.2.0",
     "@reacticons/ionicons": "^7.1.0",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.10.0",
     "firebase": "^11.10.0",
     "flowbite-react": "^0.11.7",
+    "mui": "^0.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
+    "react-markdown": "^10.1.0",
     "react-paginate": "^8.3.0"
   },
   "devDependencies": {

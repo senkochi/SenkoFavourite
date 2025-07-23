@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage';
 import EmailVerification from './pages/EmailVerification';
 import Checkout from './pages/Checkout';
 import Profile from './pages/Profile';
+import CharacterDisplay from './pages/CharacterDisplay';
 import { AuthContext } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { useContext } from 'react';
@@ -28,7 +29,8 @@ const App = () => {
           <Routes>
             <Route path='/' element={<Home />}></Route>
             <Route path='/products' element={<Products />}></Route>
-            <Route path='/characters' element={<Characters />}></Route>
+            <Route path='/characters' element={<CharacterDisplay />}></Route>
+            <Route path='/characters/:character' element={<Characters />}></Route>
             <Route path='/about' element={<About />}></Route>
             <Route path='/donate' element={<Donate />}></Route>
             <Route path='/products/:slug' element={<ProductDetails />}></Route>
