@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,4 +48,7 @@ public class Users {
 
     @OneToOne(mappedBy = "user")
     private Address address;
+
+    @OneToMany(mappedBy = "user")
+    private List<Blog> blogList;
 }

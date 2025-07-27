@@ -11,7 +11,7 @@ const UserInfo = (props) => {
   }
 
   return (
-    <div className="mx-auto">
+    <div>
       <table className="w-full table-detail">
         <tbody>
           {[

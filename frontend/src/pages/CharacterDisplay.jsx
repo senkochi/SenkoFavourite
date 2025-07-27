@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 const CharacterDisplay = () => {
   return (
     <div className="p-6 max-w-5xl mx-auto font-sans text-gray-800 mt-13">
+        <h1 className='heading'>Characters</h1>
     <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none fandom-content-wrapper">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8 ">
             <Link to={`/characters/Senko`}>
                 <CharacterCard title="Senko" brief="Senko (仙せん狐こ Senko) is the deuteragonist of Sewayaki Kitsune no Senko-san. Senko is a demigod fox who came from Kitsune heaven. Despite looking like a child, her age is over 800 years." imgurl={`/images/char-Senko.png`} />
             </Link>
