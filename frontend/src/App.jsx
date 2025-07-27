@@ -14,9 +14,13 @@ import EmailVerification from './pages/EmailVerification';
 import Checkout from './pages/Checkout';
 import Profile from './pages/Profile';
 import CharacterDisplay from './pages/CharacterDisplay';
+import Blog from './pages/Blog';
+import BlogCreate from './pages/BlogCreate';
+import ScrollToTop from './hook/scrollToTop';
 import { AuthContext } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { useContext } from 'react';
+import BlogDisplay from './pages/BlogDisplay';
 
 const App = () => {
 
@@ -26,12 +30,16 @@ const App = () => {
     <div>
         
           <Navbar />
+          <ScrollToTop />
           <Routes>
             <Route path='/' element={<Home />}></Route>
             <Route path='/products' element={<Products />}></Route>
             <Route path='/characters' element={<CharacterDisplay />}></Route>
             <Route path='/characters/:character' element={<Characters />}></Route>
             <Route path='/about' element={<About />}></Route>
+            <Route path='/blog' element={<BlogDisplay />}></Route>
+            <Route path='/blog/:slug' element={<Blog />}></Route>
+            <Route path='/blog/create' element={<BlogCreate />}></Route>
             <Route path='/donate' element={<Donate />}></Route>
             <Route path='/products/:slug' element={<ProductDetails />}></Route>
             <Route path='/cart' element={<Cart />}></Route>

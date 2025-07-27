@@ -272,13 +272,6 @@
             {/* Use dangerouslySetInnerHTML to display the remaining HTML */}
             <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-                <CharacterCard title={title} />
-                <CharacterCard title="Kuroto" />
-                <CharacterCard title="Shiro" />
-                <CharacterCard title="Koenji" />
-                <CharacterCard title="Yozora" />
-            </div>
             </div>
         )}
         </div>

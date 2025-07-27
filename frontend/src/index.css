@@ -3,13 +3,36 @@
 @source "../.flowbite-react/class-list.json";
 
 
-
 :root{
     --dark-gray:#969696;
     --heading-font: "Montserrat";
     --content-font: "Poppins", sans-serif;
     --light-gray:#A9A9A9;
 }
+
+.heading{
+  font-size: var(--text-3xl);
+  font-weight: bold;
+}
+
+.blog-heading{
+  font-size: var(--text-3xl);
+  font-weight: bold;
+}
+
+.blog-brief{
+  font-size: var(--text-base);
+  font-weight: normal;
+  color: var(--dark-gray);
+  font-style: italic;
+}
+
+.blog-content{
+  font-size: var(--text-lg);
+  font-weight: normal;
+}
+
+
 
 .footer p{
     color: var(--dark-gray);

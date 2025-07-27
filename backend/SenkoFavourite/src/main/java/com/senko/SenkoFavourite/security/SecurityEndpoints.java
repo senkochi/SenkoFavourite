@@ -7,7 +7,8 @@ public class SecurityEndpoints {
             "/api/products",
             "/api/products/**",
             "/api/send-register-code",
-            "/api/test-email"
+            "/api/test-email",
+            "/api/blog/**"
     };
 
     public static final String[] POST_ENDPOINTS = {

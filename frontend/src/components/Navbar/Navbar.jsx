@@ -69,9 +69,9 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="md:w-auto w-full">
-                <a href="/about" className="w-full">
+                <a href="/blog" className="w-full">
                   <div className="menu-item">
-                    <p className="lg:text-base md:text-sm">About</p>
+                    <p className="lg:text-base md:text-sm">Blog</p>
                     <div className="md:hidden">
                       <IonIcon name="chevron-forward-outline"></IonIcon>
                     </div>
@@ -96,7 +96,9 @@ const Navbar = () => {
         <nav>
           {authState.isAuthenticated ? (
             <>
-              <span onClick={() => navigate("/user/profile")}>Xin chào, {authState.user}</span>
+              <span onClick={() => navigate("/user/profile")}>
+                Xin chào, {authState.user}
+              </span>
               <button onClick={logout}>Đăng xuất</button>
             </>
           ) : (
