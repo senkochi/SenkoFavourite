@@ -18,4 +18,8 @@ public class SecurityEndpoints {
             "/api/send-recovery-code",
             "/api/verify-code"
     };
+
+    public static final String[] DELETE_ENDPOINTS = {
+            "/api/images/delete"
+    };
 }

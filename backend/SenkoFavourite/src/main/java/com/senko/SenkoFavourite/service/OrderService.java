@@ -32,10 +32,6 @@ public class OrderService {
         Users user = userRepository.findByUsername(username);
         Address address = addressRepository.findByUser(user).orElse(null);
 
-        UserOrder orderr = orderRepository.findByUserAndOrderId(user, 1).orElse(null);
-
-        System.out.println("Ngày orderrrr:" + orderr.getCreatedAt().toString());
-
         return orderRepository.findByUser(user).stream().map(order -> new OrderDTO(
                 order.getOrderId(),
                 order.getCreatedAt(),

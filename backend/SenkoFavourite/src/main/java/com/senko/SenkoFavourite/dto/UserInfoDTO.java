@@ -4,15 +4,12 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private String username;
+@Builder
+public class UserInfoDTO {
     private String fullName;
-    private String email;
     private String phoneNum;
-    private String imgURL;
     private String province;
     private String district;
     private String ward;

@@ -74,6 +74,7 @@ const BlogDisplay = () => {
               content={blog.content}
               thumbnail={blog.thumbnail}
               creator={blog.creator}
+              creatorAvatar={blog.creatorAvatar}
               createAt={blog.createAt}
             />
           </Link>

@@ -29,7 +29,8 @@ public class BlogService {
                 blog.getBriefContent(),
                 blog.getContent(),
                 blog.getCreateAt(),
-                blog.getUser().getFullName()
+                blog.getUser().getFullName(),
+                blog.getUser().getImgURL()
         )).toList();
     }
 
@@ -41,6 +42,7 @@ public class BlogService {
                 .content(blog.getContent())
                 .briefContent(blog.getBriefContent())
                 .creator(blog.getUser().getFullName())
+                .creatorAvatar(blog.getUser().getImgURL())
                 .thumbnail(blog.getThumbnail())
                 .createAt(blog.getCreateAt())
                 .build();
