@@ -18,4 +18,5 @@ public class BlogDTO {
     private String content;
     private LocalDateTime createAt;
     private String creator;
+    private String creatorAvatar;
 }

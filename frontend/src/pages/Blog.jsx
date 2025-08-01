@@ -32,7 +32,7 @@ const Blog = () => {
         <div className='p-6 max-w-3xl mx-auto font-sans text-gray-800 mt-13'>
             <h2 className='blog-heading font-[heading-font]'>{blog.title}</h2>
             <p className='blog-brief mb-4'>{blog.briefContent}</p>
-            <AvatarCard avatarUrl="/images/char-Kuroto.png" creator={blog.creator} createAt={blog.createAt} />
+            <AvatarCard avatarUrl={blog.creatorAvatar} creator={blog.creator} createAt={blog.createAt} />
         {/* <p className='blog-content font-[content-font] mt-13'>{blog.content}</p> */}
         {blog.content && (
                 <div dangerouslySetInnerHTML={{ __html: blog.content }} />

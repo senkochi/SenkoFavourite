@@ -37,7 +37,6 @@ public class CloudinaryController {
      * @return ResponseEntity with a success message or an error message.
      */
     @DeleteMapping("/delete")
-    @PreAuthorize("isAuthenticated()") // Only authenticated users can delete images
     public ResponseEntity<?> deleteImage(@RequestParam("imageUrl") String imageUrl) {
         try {
             String publicId = cloudinaryService.extractPublicIdFromUrl(imageUrl);

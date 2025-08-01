@@ -40,7 +40,7 @@ const BlogCard = (props) => {
 
         {/* Component AvatarCard ở phía dưới */}
         <div className="mt-4 w-full"> {/* mt-4 để tạo khoảng cách với nội dung phía trên */}
-          <AvatarCard avatarUrl="/images/char-Kuroto.png" creator={props.creator} createAt={props.createAt} />
+          <AvatarCard avatarUrl={props.creatorAvatar} creator={props.creator} createAt={props.createAt} />
         </div>
       </div>
     </div>

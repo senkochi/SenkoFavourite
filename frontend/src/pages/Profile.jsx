@@ -12,7 +12,6 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import { useEffect, useState } from "react";
-import ImageUploader from "../components/ImageUploader";
 
 const Profile = () => {
   const theme = useTheme();
@@ -24,23 +23,10 @@ const Profile = () => {
     setValue(newValue);
   };
 
-  const [userInfo, setUserInfo] = useState(null);
+  
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await axiosInstance.get("/api/user");
-        setUserInfo(response.data);
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
+  
 
   if (!isAuthenticated) {
     navigate("/login");
@@ -80,8 +66,7 @@ const Profile = () => {
             )}
             {value === 1 && (
               <Box sx={{ mt: 1 }}>
-                <UserInfo userInfo={userInfo} loading={loading} />
-                <ImageUploader />
+                <UserInfo setLoading={setLoading} loading={loading} />
               </Box>
             )}
           </Box>
