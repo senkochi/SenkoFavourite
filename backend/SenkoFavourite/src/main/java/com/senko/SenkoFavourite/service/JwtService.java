@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class JwtService {
         String role = user.getRole();
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
-        claims.put("role", role);
+        claims.put("roles", Collections.singletonList(role));
         return buildToken(username, claims);
     }
 

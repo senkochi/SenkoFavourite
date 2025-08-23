@@ -33,11 +33,11 @@ const BlogDisplay = () => {
   if (error) return <div>Error loading blogs</div>;
 
   return (
-    <div className="page-container">
+    <div className="page-container mt-5">
       <div className="relative h-[50vh]">
         <div className="absolute inset-0">
           <img
-            src={Banner}
+            src="/images/blog-banner.jpg"
             alt="product banner"
             className=" object-cover object-center w-full h-full"
           />
@@ -45,20 +45,20 @@ const BlogDisplay = () => {
         </div>
         <div className="relative flex flex-col gap-8 items-center justify-center text-center h-full">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-400">
-            Take her home
+            Let anyone know
           </h1>
           <p className="text-gray-400 md:text-2xl">
-            and make you the happiest person ever
+            Share your thoughts about her to the world
           </p>
         {authState.isAuthenticated ? (
           <button onClick={() => navigate("/blog/create")} className="bg-gray-400 px-6 py-2 rounded-full text-lg font-content
                                     transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
-              Get Started
+              Create Blog
             </button>
         ) : (
           <button onClick={() => navigate("/login")} className="bg-gray-400 px-6 py-2 rounded-full text-lg font-content
                                     transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
-              Get Started
+              Create Blog
             </button>
         )}
             

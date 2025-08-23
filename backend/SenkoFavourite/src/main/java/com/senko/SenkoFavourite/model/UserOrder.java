@@ -38,6 +38,8 @@ public class UserOrder {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
 
+    private String address;
+
     // Helper methods để quản lý mối quan hệ hai chiều (khuyến nghị)
     public void addOrderDetail(OrderDetail detail) {
         if (this.orderDetails == null) {

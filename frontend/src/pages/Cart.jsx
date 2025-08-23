@@ -1,10 +1,9 @@
-import React, { use, useState } from "react";
-import { useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
+import SenkoToast from "../components/SenkoToast";
 
 const Cart = () => {
   const [products, setProducts] = useState([]);
@@ -12,6 +11,13 @@ const Cart = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
+  
+    const showToast = (message, type = 'info') => {
+      setToast({ show: true, message, type });
+      setTimeout(() => setToast({ show: false, message: '', type }), 3000);
+    };
 
   const subtotal = products.reduce((sum, product) => {
     if (!product.isChecked) return sum; // Only include checked products in subtotal
@@ -111,7 +117,7 @@ const Cart = () => {
     const selectedProducts = products.filter(p => p.isChecked);
 
     if (selectedProducts.length === 0) {
-      toast.error("Vui lòng chọn ít nhất một sản phẩm để thanh toán.");
+      showToast("Vui lòng chọn ít nhất một sản phẩm để thanh toán.", "info");
       return;
     }
 
@@ -332,6 +338,13 @@ const Cart = () => {
             </div>
           </div>
         </div>
+        {toast.show && (
+          <SenkoToast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast({ show: false, message: '', type: 'info' })}
+          />
+        )}
       </div>
     </div>
   );

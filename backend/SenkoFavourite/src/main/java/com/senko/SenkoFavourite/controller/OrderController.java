@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,18 @@ public class OrderController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllOrder(){
+        try {
+            List<OrderDTO> orderDTOList = orderService.getAllOrder();
+            return ResponseEntity.ok(orderDTOList);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/user")
     public ResponseEntity<?> getOrderList(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         List<OrderDTO> orderList = orderService.getOrderByUsername(username);
@@ -41,7 +53,7 @@ public class OrderController {
         return ResponseEntity.ok(orderDetailList);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> createUserOrder(@RequestBody OrderRequestDTO request){
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -53,7 +65,7 @@ public class OrderController {
             }
             return ResponseEntity.ok(order);
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Lỗi không thể đặt hàng, vui lòng thử lại!"));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
 
     }

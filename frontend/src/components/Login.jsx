@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Login = (props) => {
 
@@ -50,6 +51,8 @@ const Login = (props) => {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
+                    checked={props.rememberMe}
+                    onChange={(e) => props.setRememberMe(e.target.checked)}
                     class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
                   />
                   <label
@@ -61,7 +64,7 @@ const Login = (props) => {
                 </div>
                 <div class="text-sm">
                   <a
-                    href="jajvascript:void(0);"
+                    href="/forgot-password"
                     class="text-blue-600 hover:text-blue-500 font-medium"
                   >
                     Forgot your password?
@@ -88,7 +91,8 @@ const Login = (props) => {
             </div>
 
             <div class="space-x-6 flex justify-center">
-              <button type="button" class="border-0 outline-0 cursor-pointer">
+              <a href="http://localhost:8080/oauth2/authorization/google">
+                 <button type="button" class="border-0 outline-0 cursor-pointer">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="w-6 h-6"
@@ -126,6 +130,7 @@ const Login = (props) => {
                   />
                 </svg>
               </button>
+              </a>
               <button type="button" class="border-0 outline-0 cursor-pointer">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

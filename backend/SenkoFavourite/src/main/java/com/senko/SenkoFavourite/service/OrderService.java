@@ -28,12 +28,28 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
+    public List<OrderDTO> getAllOrder(){
+        return orderRepository.findAll().stream().map(order -> new OrderDTO(
+                order.getOrderId(),
+                order.getUser().getUsername(),
+                order.getCreatedAt(),
+                order.getStatus(),
+                order.getTotal(),
+                order.getUser().getAddress().getParticular(),
+                order.getUser().getAddress().getWard(),
+                order.getUser().getAddress().getDistrict(),
+                order.getUser().getAddress().getProvince(),
+                order.getPaymentMethod()
+        )).toList();
+    }
+
     public List<OrderDTO> getOrderByUsername(String username){
         Users user = userRepository.findByUsername(username);
         Address address = addressRepository.findByUser(user).orElse(null);
 
         return orderRepository.findByUser(user).stream().map(order -> new OrderDTO(
                 order.getOrderId(),
+                order.getUser().getUsername(),
                 order.getCreatedAt(),
                 order.getStatus(),
                 order.getTotal(),
@@ -43,6 +59,14 @@ public class OrderService {
                 address.getProvince(),
                 order.getPaymentMethod()
         )).toList();
+    }
+
+    public UserOrder getOrderByOrderId(int orderId){
+        return orderRepository.findByOrderId(orderId).orElse(null);
+    }
+
+    public UserOrder saveOrder(UserOrder order){
+        return orderRepository.save(order);
     }
 
 
@@ -61,8 +85,13 @@ public class OrderService {
     }
 
     @Transactional
-    public UserOrder createUserOrder(String username, String paymentMethod, List<OrderDetailDTO> orderDetailList){
+    public UserOrder createUserOrder(String username, String paymentMethod, List<OrderDetailDTO> orderDetailList) throws Exception {
         Users user = userRepository.findByUsername(username);
+        Address address = addressRepository.findByUser(user).orElse(null);
+
+        if(!user.canOrder()){
+            throw new Exception("Please check your fullname, phone number or address!");
+        }
 
         UserOrder order = UserOrder.builder()
                 .user(user)
@@ -70,6 +99,7 @@ public class OrderService {
                 .total(0)
                 .status("Processing")
                 .paymentMethod(paymentMethod)
+                .address(address.toString())
                 .build();
 
         double totalAmount = 0;
@@ -87,4 +117,6 @@ public class OrderService {
         order.setTotal(totalAmount);
         return orderRepository.save(order);
     }
+
+
 }

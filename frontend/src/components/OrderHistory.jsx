@@ -1,91 +1,104 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import DialogPop from './DialogPop';
-import { useEffect, useState } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import formatDate from '../utils/dateFormat';
 
+const SenkoTheme = {
+  bg: "bg-gradient-to-br from-yellow-100 via-orange-100 to-pink-100 min-h-screen",
+  card: "max-w-screen-xl mx-auto rounded-2xl shadow-xl border-2 border-yellow-300 p-6",
+  heading: "text-2xl font-bold text-orange-500 font-heading",
+  label: "text-[15px] font-medium text-orange-700 font-content",
+  select: "appearance-none cursor-pointer bg-yellow-50 hover:bg-yellow-100 border border-yellow-300 outline-0 px-4 py-2 rounded-md text-[15px] font-content",
+  orderRow: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 items-center justify-between gap-x-4 gap-y-6 py-4 bg-white rounded-xl shadow-sm border border-yellow-100 mb-3",
+  orderId: "text-[15px] text-orange-700 font-medium font-content",
+  date: "text-[15px] text-slate-900 font-medium mt-2 font-content",
+  status: "bg-green-100 text-[13px] font-medium text-green-600 mt-2 inline-block rounded-md py-1.5 px-3 font-content",
+  price: "text-[15px] text-orange-500 font-semibold mt-2 font-content",
+  btn: "text-[15px] font-medium px-4 py-2 rounded-md bg-orange-400 hover:bg-orange-500 text-white tracking-wide cursor-pointer max-md:w-full font-content shadow",
+  noOrder: "py-4 text-center text-orange-400 font-content",
+};
+
 const OrderHistory = () => {
-    const [orders, setOrders] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchOrderHistory = async () => {
-            setLoading(true);
-            const response = await axiosInstance.get('/api/order');
-            if (response.status !== 200) {
-                console.error('Failed to fetch order history');
-                setLoading(false);
-                return;
-            }
-            const data = response.data;
-            setOrders(data);
-            setLoading(false);
-        };
+  useEffect(() => {
+    const fetchOrderHistory = async () => {
+      setLoading(true);
+      const response = await axiosInstance.get('/api/order/user');
+      if (response.status !== 200) {
+        console.error('Failed to fetch order history');
+        setLoading(false);
+        return;
+      }
+      setOrders(response.data);
+      setLoading(false);
+    };
+    fetchOrderHistory();
+  }, []);
 
-        fetchOrderHistory();
-    }, []);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-
+  if (loading) {
+    return (
+      <div className={SenkoTheme.bg} style={{ fontFamily: "'Poppins', 'Montserrat', Arial, sans-serif" }}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-orange-400 text-xl font-content">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-        <div class="p-4">
-            <div class="max-w-screen-xl mx-auto">
-                <div class="border-b border-gray-300 pb-4">
-                    <div class="flex gap-4">
-                        <h3 class="text-2xl font-semibold text-slate-900">Order History</h3>
-                        <div class="ml-auto">
-                            <select class="appearance-none cursor-pointer bg-gray-100 hover:bg-gray-200 border border-gray-300 outline-0 px-4 py-2 rounded-md text-[15px]">
-                                <option>All orders</option>
-                                <option>Completed</option>
-                                <option>Processing</option>
-                                <option>Cancelled</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="divide-y divide-gray-300 mt-4">
-                    {orders ? orders.map((order) => (
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 items-center justify-between gap-x-4 gap-y-6 py-4">
-                        <div>
-                            
-                            <div class="mt-2">
-                                <p class="text-[15px] text-slate-500 font-medium">Order ID: <span class="ml-1 text-slate-900">{order.orderId}</span></p>
-                            </div>
-                        </div>
-                        <div>
-                            <h6 class="text-[15px] font-medium text-slate-500">Date</h6>
-                            {console.log(order.createdAt)}
-                            <p class="text-[15px] text-slate-900 font-medium mt-2">{formatDate(order.createdAt)}</p>
-                        </div>
-                        <div>
-                            <h6 class="text-[15px] font-medium text-slate-500">Status</h6>
-                            <p class="bg-green-100 text-[13px] font-medium text-green-600 mt-2 inline-block rounded-md py-1.5 px-3">{order.status}</p>
-                        </div>
-                        <div>
-                            <h6 class="text-[15px] font-medium text-slate-500">Price</h6>
-                            <p class="text-[15px] text-slate-900 font-medium mt-2">${order.total}.00</p>
-                        </div>
-                        <div class="flex md:flex-wrap gap-4 lg:justify-end max-md:col-span-full">
-                            <button type="button" class="text-[15px] font-medium px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white tracking-wide cursor-pointer max-md:w-full">Buy again</button>
-                            <DialogPop orderId={order.orderId} address={order.particular + ", " + order.ward + ", " + order.district + ", " + order.province} />
-                        </div>
-                    </div>
-                    )) : (
-                        <div class="py-4">
-                            <p class="text-center text-slate-500">No orders found.</p>
-                        </div>
-                    )}
-
-                </div>
-            </div>
+    <div style={{ fontFamily: "'Poppins', 'Montserrat', Arial, sans-serif" }}>
+      <div className={SenkoTheme.card}>
+        <div className="border-b border-yellow-300 pb-4 mb-4 flex gap-4 items-center">
+          <img
+            src="/Senko.png"
+            alt="Senko Fox"
+            className="w-12 h-12 rounded-full border-2 border-yellow-300 shadow mr-2"
+          />
+          <h3 className={SenkoTheme.heading}>Senko-san Order History</h3>
+          <div className="ml-auto">
+            <select className={SenkoTheme.select}>
+              <option>All orders</option>
+              <option>Completed</option>
+              <option>Processing</option>
+              <option>Cancelled</option>
+            </select>
+          </div>
         </div>
+        <div className="divide-y divide-yellow-100 mt-4">
+          {orders && orders.length > 0 ? orders.map((order) => (
+            <div className={SenkoTheme.orderRow} key={order.orderId}>
+              <div>
+                <p className={SenkoTheme.label}>Order ID:</p>
+                <span className={SenkoTheme.orderId}>{order.orderId}</span>
+              </div>
+              <div>
+                <p className={SenkoTheme.label}>Date</p>
+                <span className={SenkoTheme.date}>{formatDate(order.createdAt)}</span>
+              </div>
+              <div>
+                <p className={SenkoTheme.label}>Status</p>
+                <span className={SenkoTheme.status}>{order.status}</span>
+              </div>
+              <div>
+                <p className={SenkoTheme.label}>Price</p>
+                <span className={SenkoTheme.price}>${order.total}.00</span>
+              </div>
+              <div className="flex md:flex-wrap gap-4 lg:justify-end max-md:col-span-full">
+                <button type="button" className={SenkoTheme.btn}>Buy again</button>
+                <DialogPop orderId={order.orderId} address={`${order.particular}, ${order.ward}, ${order.district}, ${order.province}`} />
+              </div>
+            </div>
+          )) : (
+            <div className={SenkoTheme.noOrder}>
+              <p>No orders found.</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default OrderHistory
+export default OrderHistory;

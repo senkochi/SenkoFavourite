@@ -30,5 +30,15 @@ public class Address {
     @JoinColumn(name = "user_id")
     private Users user;
 
+    @Override
+    public String toString() {
+        return particular + ", " + ward + ", " + district + ", " + province;
+    }
 
+    public boolean isAddressValid(){
+        return province != null && !province.trim().isEmpty() &&
+                district != null && !district.trim().isEmpty() &&
+                ward != null && !ward.trim().isEmpty() &&
+                particular != null && !particular.trim().isEmpty();
+    }
 }

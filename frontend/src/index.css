@@ -1,9 +1,12 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Quicksand:wght@400;700&display=swap');
 @plugin "flowbite-react/plugin/tailwindcss";
 @source "../.flowbite-react/class-list.json";
 
 
+
 :root{
+  --anime-font: 'Mochiy Pop One', 'Quicksand', cursive;
     --dark-gray:#969696;
     --heading-font: "Montserrat";
     --content-font: "Poppins", sans-serif;
