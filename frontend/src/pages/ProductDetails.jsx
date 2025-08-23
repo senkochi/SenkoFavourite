@@ -10,15 +10,23 @@ import RelevantProduct from "../components/Product/RelevantProduct";
 import ProductCarousel from "../components/ProductCarousel";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
-import toast from "react-hot-toast";
+import SenkoToast from "../components/SenkoToast";
 
 const ProductDetails = () => {
+  const isAuthenticated = localStorage.getItem("token") !== null;
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [related, setRelated] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const { slug } = useParams();
+
+  const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
+  
+    const showToast = (message, type = 'info') => {
+      setToast({ show: true, message, type });
+      setTimeout(() => setToast({ show: false, message: '', type }), 3000);
+    };
 
   useEffect(() => {
     setLoading(true);
@@ -63,6 +71,10 @@ const ProductDetails = () => {
   const handleAddToCart = async (e) => {
     // Logic to add the product to the cart
     setError(null);
+    if (!isAuthenticated) {
+      showToast("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.", "error");
+      return;
+    }
     try {
        console.log(product.productId, quantity, product.name);
       const response = await axiosInstance.post('/api/cart/add', {
@@ -150,7 +162,15 @@ const ProductDetails = () => {
         </div>
         <RelevantProduct recommended={related}></RelevantProduct>
         <DetailAndFeedback product={product}></DetailAndFeedback>
+        {toast.show && (
+          <SenkoToast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast({ show: false, message: '', type: 'info' })}
+          />
+        )}
       </div>
+      
     </div>
   );
 };

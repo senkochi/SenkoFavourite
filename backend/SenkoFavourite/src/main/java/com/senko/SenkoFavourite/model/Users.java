@@ -51,4 +51,10 @@ public class Users {
 
     @OneToMany(mappedBy = "user")
     private List<Blog> blogList;
+
+    public boolean canOrder(){
+        return fullName != null && !fullName.trim().isEmpty() &&
+                phoneNum != null && !phoneNum.trim().isEmpty() &&
+                address != null && address.isAddressValid();
+    }
 }

@@ -4,9 +4,12 @@ import ProductFilter from "./ProductFilter";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import { useSearchParams } from "react-router-dom";
+import SenkoToast from "../SenkoToast";
 
 const ProductDisplay = () => {
+  const isAuthenticated = localStorage.getItem("token") !== null;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,6 +19,13 @@ const ProductDisplay = () => {
     category: [],
   });
   const [totalPages, setTotalPages] = useState(0);
+
+  const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
+
+  const showToast = (message, type = 'info') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: '', type }), 3000);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -85,6 +95,34 @@ const ProductDisplay = () => {
     });
   }; 
 
+  const handleAddToCart = async (productId, quantity) => {
+    // Logic to add the product to the cart
+    setError(null);
+    if (!isAuthenticated) {
+      showToast("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.", "error");
+      return;
+    }
+    try {
+       console.log(productId);
+      const response = await axiosInstance.post('/api/cart/add', {
+        productId: productId,
+        quantity
+      });
+      console.log(productId, 1);
+      if (response.status === 200) {
+        console.log('Product added to cart:', response.data);
+        showToast("Sản phẩm đã được thêm vào giỏ hàng!", "success");
+      } else {
+        setError("Không thể thêm sản phẩm vào giỏ hàng.");
+        console.log(response.data);
+        showToast("Không thể thêm sản phẩm vào giỏ hàng.", "error");
+      }
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+      setError('Không thể thêm sản phẩm vào giỏ hàng.');
+    }
+  }
+
   return (
     <div className="flex md:flex-row flex-col">
       <div className="px-20">
@@ -98,7 +136,7 @@ const ProductDisplay = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mb-10">
           {products?.map((product) => (
-            <div key={product._id}
+            <div key={product.id}
                  className="bg-white flex flex-col rounded overflow-hidden shadow-md hover:scale-[1.01] transition-all relative">
               <Link to={`/products/${product.slug}`}>
                 <div class="w-full">
@@ -138,6 +176,7 @@ const ProductDisplay = () => {
               <div className="min-h-[50px] p-4 !pt-0">
                 <button
                   type="button"
+                  onClick={() => handleAddToCart(product.productId, 1)}
                   class="absolute left-0 right-0 bottom-3 max-w-[88%] mx-auto text-sm px-2 py-2 font-medium w-full bg-amber-300 hover:bg-amber-200 text-white tracking-wide outline-none border-none rounded"
                 >
                   Add to cart
@@ -161,6 +200,13 @@ const ProductDisplay = () => {
             activeClassName={"active"}
           />
         </div>
+        {toast.show && (
+          <SenkoToast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast({ show: false, message: '', type: 'info' })}
+          />
+        )}
       </div>
     </div>
   );

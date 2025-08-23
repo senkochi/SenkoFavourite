@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class OrderDTO {
     private int orderId;
+    private String username;
     private LocalDateTime createdAt;
     private String status;
     private double total;

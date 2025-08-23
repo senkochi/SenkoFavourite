@@ -10,14 +10,14 @@ import toast from "react-hot-toast";
 
 const LoginPage = () => {
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(localStorage.getItem("username") || "");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [loginFail, setLoginFail] = useState(false);
   const [registerFail, setRegisterFail] = useState(false);
   const [register, setRegister] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState("");
-  const backendURL = import.meta.env.VITE_BACKEND_URL;
   const {login} = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -38,6 +38,10 @@ const LoginPage = () => {
         console.log("Người dùng: ", username);
         console.log("Token: ", response.data);
         login(username, jwtToken);
+        console.log("Nhớ tôi: ", rememberMe);
+        if (rememberMe) {
+          localStorage.setItem("username", username);
+        }
         console.log("Người dùng: ", username);
         console.log("Token: ", response.data);
         toast.success("Login successful!");
@@ -125,6 +129,8 @@ const LoginPage = () => {
               handleLogin={handleLogin}
               loading={loading}
               fail={loginFail}
+              rememberMe={rememberMe}
+              setRememberMe={setRememberMe}
             ></Login>
             )}
             

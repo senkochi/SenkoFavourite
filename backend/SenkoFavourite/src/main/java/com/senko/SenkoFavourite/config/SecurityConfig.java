@@ -2,7 +2,9 @@ package com.senko.SenkoFavourite.config;
 
 import com.senko.SenkoFavourite.model.MyUserDetails;
 import com.senko.SenkoFavourite.security.JwtFilter;
+import com.senko.SenkoFavourite.security.OAuth2SuccessHandler;
 import com.senko.SenkoFavourite.security.SecurityEndpoints;
+import com.senko.SenkoFavourite.service.CustomOAuth2UserService;
 import com.senko.SenkoFavourite.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +39,16 @@ public class SecurityConfig {
     private UserDetailsService userDetailsService;
 
     @Bean
+    public CustomOAuth2UserService customOAuth2UserService(){
+        return new CustomOAuth2UserService();
+    }
+
+    @Bean
+    public OAuth2SuccessHandler oAuth2SuccessHandler(){
+        return new OAuth2SuccessHandler();
+    }
+
+    @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
@@ -49,11 +61,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.GET, SecurityEndpoints.GET_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, SecurityEndpoints.POST_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.PUT, SecurityEndpoints.PUT_ENDPOINTS).permitAll()
+                        .requestMatchers("/login/oauth2/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, SecurityEndpoints.ADMIN_GET_ENDPOINTS).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService()) // custom service xử lý user Google
+                        )
+                        .successHandler(oAuth2SuccessHandler())
+                );
         return http.build();
     }
 
