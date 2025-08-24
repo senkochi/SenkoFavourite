@@ -21,12 +21,16 @@ const SenkoTheme = {
     "w-full h-72 object-cover rounded-xl shadow border-2 border-orange-200",
   carouselInner:
     "flex transition-transform duration-700 ease-in-out h-72 w-full",
-  videoGrid: "grid grid-cols-1 md:grid-cols-3 gap-6",
+  videoGrid: "grid grid-cols-1 md:grid-cols-3 gap-8",
   videoBox:
-    "bg-orange-50 rounded-xl overflow-hidden shadow flex items-center justify-center h-56",
+    "bg-white rounded-xl shadow-lg border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 flex flex-col items-center p-4 cursor-pointer",
+  videoThumb: "w-full aspect-video rounded-lg overflow-hidden mb-3 bg-orange-50 flex items-center justify-center",
   fox: "w-16 h-16 rounded-full border-2 border-yellow-300 shadow mb-4 mx-auto",
   moreBtn:
     "mt-6 px-6 py-2 bg-orange-400 hover:bg-orange-500 text-white rounded-full font-semibold font-content shadow block mx-auto",
+  popupOverlay: "fixed inset-0 bg-black/50 bg-opacity-60 flex items-center justify-center z-50",
+  popupContent: "bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full flex flex-col items-center relative",
+  closeBtn: "absolute top-4 right-4 bg-orange-400 hover:bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center cursor-pointer font-bold text-xl",
 };
 
 const Gallery = () => {
@@ -35,25 +39,22 @@ const Gallery = () => {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [videos, setVideos] = useState([]);
+  const [popupVideo, setPopupVideo] = useState(null);
 
   const fetchImages = async () => {
     try {
       const response = await axiosInstance.get("/api/gallery/carousel");
       setImages(response.data);
-      console.log("Fetched images:", response.data);
     } catch (error) {
-      console.error("Error fetching images:", error);
       setImages([]);
     }
   };
 
   const fetchVideos = async () => {
     try {
-      const response = await axiosInstance.get("/api/gallery/all/video");
+      const response = await axiosInstance.get("/api/youtube/all");
       setVideos(response.data);
-      console.log("Fetched videos:", response.data);
     } catch (error) {
-      console.error("Error fetching videos:", error);
       setVideos([]);
     }
   };
@@ -68,7 +69,7 @@ const Gallery = () => {
       setCurrentImg((prev) => (prev + 1) % images.length);
     }, 4000);
     return () => clearInterval(intervalRef.current);
-  }, []);
+  }, [images.length]);
 
   const prevImg = () => {
     setCurrentImg((prev) => (prev - 1 + images.length) % images.length);
@@ -85,6 +86,16 @@ const Gallery = () => {
 
   const handleSeeMore = () => {
     navigate("/gallery/all");
+  };
+
+  const handleOpenVideo = (video) => {
+    setPopupVideo(video);
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleClosePopup = () => {
+    setPopupVideo(null);
+    document.body.style.overflow = "";
   };
 
   return (
@@ -169,22 +180,19 @@ const Gallery = () => {
         {/* Article: Video Senko */}
         <article className={SenkoTheme.section}>
           <h2 className={SenkoTheme.sectionTitle}>Video Senko</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className={SenkoTheme.videoGrid}>
             {videos.map((video, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-xl shadow-lg border-2 border-orange-200 hover:border-orange-400 transition-all duration-300 flex flex-col items-center p-4"
+                className={SenkoTheme.videoBox}
+                onClick={() => handleOpenVideo(video)}
+                title="Xem video"
               >
-                <div className="w-full aspect-video rounded-lg overflow-hidden mb-3">
-                  <iframe
-                    width="100%"
-                    height="100%"
-                    src="https://www.youtube.com/embed/v92X4wy_VPE"
-                    title={video.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
+                <div className={SenkoTheme.videoThumb}>
+                  <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
                 <div className="text-orange-600 font-bold text-base text-center">
@@ -195,6 +203,38 @@ const Gallery = () => {
           </div>
         </article>
       </div>
+
+      {/* Popup video */}
+      {popupVideo && (
+        <div className={SenkoTheme.popupOverlay} onClick={handleClosePopup}>
+          <div
+            className={SenkoTheme.popupContent}
+            onClick={e => e.stopPropagation()}
+          >
+            <button className={SenkoTheme.closeBtn} onClick={handleClosePopup} aria-label="Đóng">
+              ×
+            </button>
+            <div className="w-full aspect-video rounded-xl overflow-hidden mb-4">
+              <iframe
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${popupVideo.videoId}`}
+                title={popupVideo.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+            <div className="text-orange-600 font-bold text-lg text-center mb-2">
+              {popupVideo.title}
+            </div>
+            <div className="text-slate-700 text-base text-center">
+              {popupVideo.description}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

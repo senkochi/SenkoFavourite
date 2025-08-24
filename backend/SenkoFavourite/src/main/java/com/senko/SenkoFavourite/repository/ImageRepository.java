@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, Integer>{
-    List<Image> findTop5ByOrderByImageIdDesc();
+    List<Image> findTop5ByMediaTypeOrderByImageIdDesc(String mediaType);
     List<Image> findByMediaType(String mediaType);
 }

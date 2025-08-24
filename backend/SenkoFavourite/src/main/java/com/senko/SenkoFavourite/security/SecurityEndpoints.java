@@ -11,7 +11,8 @@ public class SecurityEndpoints {
             "/api/blog/**",
             "/api/gallery/carousel",
             "/api/gallery/all/image",
-            "/api/gallery/all/video"
+            "/api/gallery/all/video",
+            "/api/youtube/all"
     };
 
     public static final String[] POST_ENDPOINTS = {
