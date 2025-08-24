@@ -13,7 +13,7 @@ public class ImageService {
     private ImageRepository imageRepository;
 
     public List<Image> getCarousel(){
-        return imageRepository.findTop5ByOrderByImageIdDesc();
+        return imageRepository.findTop5ByMediaTypeOrderByImageIdDesc("image");
     }
 
     public List<Image> getAllMedia(String mediaType){
