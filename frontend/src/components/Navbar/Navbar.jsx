@@ -77,7 +77,9 @@ const Navbar = () => {
         <nav>
           {authState.isAuthenticated ? (
             <>
-              {authState.roles && authState.roles.includes("ROLE_ADMIN") ? (
+              {console.log(authState)}
+              {console.log("ffefef " + authState.role)}
+              {authState.role && authState.role.includes("ROLE_ADMIN") ? (
                 <span
                   className="cursor-pointer text-orange-500 font-bold hover:underline"
                   style={{ fontFamily: "'Montserrat', 'Poppins', Arial, sans-serif" }}

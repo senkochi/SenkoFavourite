@@ -63,7 +63,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, SecurityEndpoints.POST_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.PUT, SecurityEndpoints.PUT_ENDPOINTS).permitAll()
                         .requestMatchers("/login/oauth2/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, SecurityEndpoints.ADMIN_GET_ENDPOINTS).hasRole("ADMIN")
+                        //.requestMatchers(HttpMethod.GET, SecurityEndpoints.ADMIN_GET_ENDPOINTS).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

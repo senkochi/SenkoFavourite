@@ -69,4 +69,17 @@ public class OrderController {
         }
 
     }
+
+    @PutMapping("/admin/update-status")
+    public ResponseEntity<?> updateOrderStatus(@RequestParam("orderId") int orderId,
+                                               @RequestParam("status") String status){
+        try{
+            System.out.println("cccc" + orderId + "fefe" + status);
+            orderService.updateOrderStatus(orderId, status);
+            return ResponseEntity.ok("Order status updated");
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

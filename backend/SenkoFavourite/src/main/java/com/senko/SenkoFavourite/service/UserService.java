@@ -5,6 +5,7 @@ import com.senko.SenkoFavourite.dto.UserInfoDTO;
 import com.senko.SenkoFavourite.model.Address;
 import com.senko.SenkoFavourite.model.Users;
 import com.senko.SenkoFavourite.model.VerificationCode;
+import com.senko.SenkoFavourite.repository.AddressRepository;
 import com.senko.SenkoFavourite.repository.UserRepository;
 import com.senko.SenkoFavourite.repository.VerificationCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class UserService {
 
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     public boolean isEmailExist(String email){
         Optional<Users> user = repo.findByEmail(email);
@@ -56,11 +60,22 @@ public class UserService {
         Users user = repo.findByUsername(username);
         user.setFullName(dto.getFullName());
         user.setPhoneNum(dto.getPhoneNum());
-        user.getAddress().setProvince(dto.getProvince());
-        user.getAddress().setDistrict(dto.getDistrict());
-        user.getAddress().setWard(dto.getWard());
-        user.getAddress().setParticular(dto.getParticular());
-        repo.save(user);
+        if(user.getAddress() == null) {
+            Address address = Address.builder()
+                    .particular(dto.getParticular())
+                    .ward(dto.getWard())
+                    .district(dto.getDistrict())
+                    .province(dto.getProvince())
+                    .user(user)
+                    .build();
+            addressRepository.save(address);
+        } else {
+            user.getAddress().setProvince(dto.getProvince());
+            user.getAddress().setDistrict(dto.getDistrict());
+            user.getAddress().setWard(dto.getWard());
+            user.getAddress().setParticular(dto.getParticular());
+            repo.save(user);
+        }
         return "Information updated successfully!";
     }
 

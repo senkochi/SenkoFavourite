@@ -35,6 +35,9 @@ public class Blog {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
+    @Column
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;

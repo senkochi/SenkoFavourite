@@ -21,8 +21,8 @@ public class BlogService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<BlogDTO> getAllBlog(){
-        return blogRepository.findAll().stream().map(blog -> new BlogDTO(
+    public List<BlogDTO> getAllBlog(String status){
+        return blogRepository.findAllByStatusOrderByCreateAtDesc(status).stream().map(blog -> new BlogDTO(
                 blog.getSlug(),
                 blog.getThumbnail(),
                 blog.getTitle(),
@@ -58,6 +58,7 @@ public class BlogService {
                 .thumbnail(dto.getThumbnail())
                 .createAt(LocalDateTime.now())
                 .slug(dto.getSlug())
+                .status("Unapproved")
                 .build();
         return blogRepository.save(blog);
     }

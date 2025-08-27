@@ -21,6 +21,7 @@ import Dashboard from './pages/Dashboard';
 import ScrollToTop from './hook/scrollToTop';
 import ForgotPassword from './pages/ForgotPassword';
 import VnpayReturn from './pages/VnpayReturn';
+import ImageGallery from './pages/ImageGallery';
 import { AuthContext } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { useContext } from 'react';
@@ -56,6 +57,7 @@ const App = () => {
             <Route path='/admin/:tab' element={<Dashboard />}></Route>
             <Route path='/forgot-password' element={<ForgotPassword />}></Route>
             <Route path='/vnpay-return' element={<VnpayReturn />}></Route>
+            <Route path='/gallery/all' element={<ImageGallery />}></Route>
           </Routes>
           <Footer />
         

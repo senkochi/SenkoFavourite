@@ -17,7 +17,16 @@ public class BlogController {
     @GetMapping
     public ResponseEntity<?> getAllBlog(){
         try {
-            return ResponseEntity.ok(blogService.getAllBlog());
+            return ResponseEntity.ok(blogService.getAllBlog("Approved"));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<?> getAllUnapprovedBlog(){
+        try {
+            return ResponseEntity.ok(blogService.getAllBlog("Unapproved"));
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }

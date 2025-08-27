@@ -142,12 +142,12 @@ const ForgotPassword = () => {
         )}
 
         {toast.show && (
-  <SenkoToast
-    message={toast.message}
-    type={toast.type}
-    onClose={() => setToast({ show: false, message: '', type: 'info' })}
-  />
-)}
+          <SenkoToast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast({ show: false, message: '', type: 'info' })}
+          />
+        )}
 
         {step === 2 && (
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
