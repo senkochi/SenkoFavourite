@@ -1,6 +1,8 @@
 package com.senko.SenkoFavourite.service;
 
 import com.senko.SenkoFavourite.dto.CartDetailDTO;
+import com.senko.SenkoFavourite.exception.types.InsufficientStockException;
+import com.senko.SenkoFavourite.exception.types.NotFoundException;
 import com.senko.SenkoFavourite.model.Cart;
 import com.senko.SenkoFavourite.model.CartDetail;
 import com.senko.SenkoFavourite.model.Product;
@@ -9,8 +11,8 @@ import com.senko.SenkoFavourite.repository.CartDetailRepository;
 import com.senko.SenkoFavourite.repository.CartRepository;
 import com.senko.SenkoFavourite.repository.ProductRepository;
 import com.senko.SenkoFavourite.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,14 +52,18 @@ public class CartService {
                 .toList();
     }
 
+    @Transactional
     public String addToCart(String username, int productId, int quantity){
         Users user = userRepository.findByUsername(username);
         if (user == null){
-            return "Cần đăng nhập để thêm vào giỏ hàng";
+            throw new NotFoundException("Đăng nhập để thêm vào giỏ hàng");
         }
         Product product = productRepository.findByProductId(productId);
         if(product == null){
-            return "Sản phẩm không tồn tại";
+            throw new NotFoundException("Không tìm thấy sản phẩm");
+        }
+        if(product.getQuantity()<quantity){
+            throw new InsufficientStockException("Không đủ sản phẩn trong kho");
         }
 
         Cart cart = cartRepository.findByUser(user)
@@ -88,19 +94,19 @@ public class CartService {
     public String removeFromCart(String username, int productId){
         Users user = userRepository.findByUsername(username);
         if(user == null){
-            return "Cần đăng nhập để thao tác";
+            throw new NotFoundException("Cần đăng nhập để thao tác");
         }
 
         Product product = productRepository.findByProductId(productId);
         if(product == null){
-            return "Sản phẩm không tồn tại";
+            throw new NotFoundException("Không tìm thấy sản phẩm");
         }
 
         Cart cart = cartRepository.findByUser(user).orElse(null);
 
         CartDetail cartDetail = cartDetailRepository.findByCartAndProduct(cart, product).orElse(null);
         if(cartDetail == null){
-            return "Sản phẩm không tồn tại trong giỏ hàng";
+            throw new NotFoundException("Không tìm thấy sản phẩm trong giỏ hàng");
         }
         cartDetailRepository.delete(cartDetail);
         return "Xóa thành công";

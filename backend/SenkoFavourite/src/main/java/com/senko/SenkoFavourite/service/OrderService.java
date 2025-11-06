@@ -88,9 +88,8 @@ public class OrderService {
     public UserOrder createUserOrder(String username, String paymentMethod, List<OrderDetailDTO> orderDetailList) throws Exception {
         Users user = userRepository.findByUsername(username);
         Address address = addressRepository.findByUser(user).orElse(null);
-
-        if(!user.canOrder()){
-            throw new Exception("Please check your fullname, phone number or address!");
+        if(user.canOrder()){
+            throw new Exception("Vui lòng kiểm tra lại họ tên, số điện thoại và địa chỉ!");
         }
 
         UserOrder order = UserOrder.builder()

@@ -27,7 +27,6 @@ public class OrderController {
     private CartService cartService;
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllOrder(){
         try {
             List<OrderDTO> orderDTOList = orderService.getAllOrder();

@@ -34,10 +34,5 @@ public class AddressService {
                 .build();
     }
 
-    public boolean isAddressValid(Address address){
-        return address.getProvince() != null && !address.getProvince().trim().isEmpty() && 
-        address.getDistrict() != null && !address.getDistrict().trim().isEmpty() && 
-        address.getWard() != null && !address.getWard().trim().isEmpty() && 
-        address.getParticular() != null && !address.getParticular().trim().isEmpty();
-    }
+    
 }

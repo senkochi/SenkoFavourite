@@ -51,4 +51,16 @@ public class BlogController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PutMapping("/admin/approve")
+    public ResponseEntity<?> updateBlogStatus(@RequestParam int blogId){
+        try {
+            blogService.updateBlogStatus(blogId);
+            System.out.println("cccccc" + blogId);
+            return ResponseEntity.ok("Blog approved/unapproved successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

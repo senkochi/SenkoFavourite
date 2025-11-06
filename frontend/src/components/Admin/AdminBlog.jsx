@@ -1,6 +1,7 @@
 import React, { use } from 'react';
 import axiosInstance from '../../utils/axiosInstance';
 import dateFormat from '../../utils/dateFormat';
+import { useNavigate } from 'react-router-dom';
 
 const blogList = [
   {
@@ -22,6 +23,8 @@ const blogList = [
 const AdminBlog = () => {
 
     const [blogs, setBlogs] = React.useState([]);
+
+    const navigate = useNavigate();
 
     React.useEffect(() => { 
         const fetchBlogs = async () => {
@@ -63,11 +66,13 @@ const AdminBlog = () => {
             />
           </div>
           <div className="flex-1 flex flex-col gap-2">
-            <span className="font-bold text-orange-500 text-lg">#{1}</span>
+            <span className="font-bold text-orange-500 text-lg">#{blog.blogId}</span>
             <div className="font-bold text-orange-700 text-base">{blog.title}</div>
             <div className="text-slate-700 text-sm">{blog.briefContent}</div>
             <div className="text-orange-400 text-xs">Ngày tạo: {dateFormat(blog.createAt)}</div>
-            <button className="mt-2 px-4 py-2 bg-orange-400 text-white rounded-full font-semibold hover:bg-orange-500 transition self-start">
+            <button className="mt-2 px-4 py-2 bg-orange-400 text-white rounded-full font-semibold hover:bg-orange-500 transition self-start"
+                    onClick={() => navigate(`/blog/${blog.slug}`)}
+            >
               Xem chi tiết
             </button>
           </div>

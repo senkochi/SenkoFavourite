@@ -12,4 +12,5 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
     List<Blog> findAllByStatusOrderByCreateAtDesc(String status);
     List<Blog> findByUser(Users user);
     Optional<Blog> findByUserAndBlogId(Users user, int blogId);
+    Blog findByBlogId(int blogId);
 }

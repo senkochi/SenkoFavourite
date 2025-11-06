@@ -1,6 +1,7 @@
 package com.senko.SenkoFavourite.service;
 
 import com.senko.SenkoFavourite.dto.ProductDTO;
+import com.senko.SenkoFavourite.exception.types.NotFoundException;
 import com.senko.SenkoFavourite.mapper.ProductMapper;
 import com.senko.SenkoFavourite.model.Product;
 import com.senko.SenkoFavourite.repository.ProductRepository;
@@ -48,7 +49,7 @@ public class ProductService {
     }
 
     public List<ProductDTO> getRelatedProducts(String slug){
-        Product product = productRepository.findBySlug(slug).orElseThrow();
+        Product product = productRepository.findBySlug(slug).orElseThrow(() -> new NotFoundException("Không tìm thấy sản phẩm"));
 
         int id = product.getProductId();
 

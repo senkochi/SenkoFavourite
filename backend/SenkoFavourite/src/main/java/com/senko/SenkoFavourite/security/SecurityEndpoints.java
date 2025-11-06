@@ -34,6 +34,12 @@ public class SecurityEndpoints {
     };
 
     public static final String[] ADMIN_GET_ENDPOINTS = {
-            "/api/order/admin"
+            "/api/order/admin",
+            "/api/blog/admin",
+    };
+
+    public static final String[] ADMIN_PUT_ENDPOINTS = {
+            "/api/order/admin/update-status",
+            "/api/blog//admin/approve",
     };
 }
