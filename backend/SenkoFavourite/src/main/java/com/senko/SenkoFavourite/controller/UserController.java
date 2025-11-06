@@ -41,6 +41,7 @@ public class UserController {
         try{
             return ResponseEntity.ok(userService.updatePersonalInfo(username, dto));
         } catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

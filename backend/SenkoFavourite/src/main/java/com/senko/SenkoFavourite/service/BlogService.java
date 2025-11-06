@@ -21,14 +21,16 @@ public class BlogService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<BlogDTO> getAllBlog(){
-        return blogRepository.findAll().stream().map(blog -> new BlogDTO(
+    public List<BlogDTO> getAllBlog(String status){
+        return blogRepository.findAllByStatusOrderByCreateAtDesc(status).stream().map(blog -> new BlogDTO(
+                blog.getBlogId(),
                 blog.getSlug(),
                 blog.getThumbnail(),
                 blog.getTitle(),
                 blog.getBriefContent(),
                 blog.getContent(),
                 blog.getCreateAt(),
+                blog.getStatus(),
                 blog.getUser().getFullName(),
                 blog.getUser().getImgURL()
         )).toList();
@@ -37,6 +39,7 @@ public class BlogService {
     public BlogDTO getBlogBySlug(String slug){
         Blog blog = blogRepository.findBySlug(slug).orElse(null);
         return BlogDTO.builder()
+                .blogId(blog.getBlogId())
                 .title(blog.getTitle())
                 .slug(blog.getSlug())
                 .content(blog.getContent())
@@ -45,6 +48,7 @@ public class BlogService {
                 .creatorAvatar(blog.getUser().getImgURL())
                 .thumbnail(blog.getThumbnail())
                 .createAt(blog.getCreateAt())
+                .status(blog.getStatus())
                 .build();
     }
 
@@ -58,7 +62,17 @@ public class BlogService {
                 .thumbnail(dto.getThumbnail())
                 .createAt(LocalDateTime.now())
                 .slug(dto.getSlug())
+                .status("Unapproved")
                 .build();
+        return blogRepository.save(blog);
+    }
+
+    public Blog updateBlogStatus(int blogId){
+        Blog blog = blogRepository.findByBlogId(blogId);
+        if(blog.getStatus().equals("Unapproved"))
+            blog.setStatus("Approved");
+        else
+            blog.setStatus("Unapproved");
         return blogRepository.save(blog);
     }
 }

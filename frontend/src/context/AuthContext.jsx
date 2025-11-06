@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isAuthenticated: false,
     user: null,
-    roles: null,
+    role: null,
     loading: true,
   });
 
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     if (token && typeof token === 'string' && token.split('.').length === 3) {
       try {
         const decodedToken = JSON.parse(atob(token.split(".")[1]));
-        const roles = decodedToken.role || []; // Lấy vai trò từ token
+        const role = decodedToken.role || []; // Lấy vai trò từ token
         const username = decodedToken.sub; // Tên người dùng thường nằm trong 'sub' claim
 
         const currentTime = Date.now() / 1000; // Thời gian hiện tại tính bằng giây (Unix timestamp)
@@ -29,11 +29,11 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem("token");
           // Xóa header Authorization khỏi axiosInstance khi token hết hạn
           delete axiosInstance.defaults.headers.common['Authorization']; 
-          setAuthState({ isAuthenticated: false, user: null, roles: null, loading: false });
+          setAuthState({ isAuthenticated: false, user: null, role: null, loading: false });
           toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
         } else {
           // Token hợp lệ
-          setAuthState({ isAuthenticated: true, user: username, roles: roles, loading: false });
+          setAuthState({ isAuthenticated: true, user: username, role: role, loading: false });
           // QUAN TRỌNG: Thiết lập Authorization header cho axiosInstance
           // Điều này đảm bảo các yêu cầu sau khi refresh trang vẫn có token
           axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("token");
         // Xóa header Authorization khỏi axiosInstance khi token bị hỏng
         delete axiosInstance.defaults.headers.common['Authorization']; 
-        setAuthState({ isAuthenticated: false, user: null, roles: null, loading: false });
+        setAuthState({ isAuthenticated: false, user: null, role: null, loading: false });
         toast.error("Token không hợp lệ hoặc bị hỏng. Vui lòng đăng nhập lại.");
       }
     } else {
@@ -65,15 +65,15 @@ export const AuthProvider = ({ children }) => {
 
     try {
         const decodedToken = JSON.parse(atob(token.split(".")[1]));
-        const roles = decodedToken.roles || []; // Lấy vai trò từ token
+        const role = decodedToken.role || []; // Lấy vai trò từ token
         const userFromToken = decodedToken.sub; // Tên người dùng thường nằm trong 'sub' claim
 
         console.log("Token đã được lưu:", token); // Log toàn bộ token thay vì chỉ payload
         console.log("Payload đã giải mã:", decodedToken);
         console.log("Người dùng đăng nhập:", userFromToken);
-        console.log("Vai trò:", roles);
+        console.log("Vai trò:", role);
 
-        setAuthState({ isAuthenticated: true, user: userFromToken, role: roles, loading: false });
+        setAuthState({ isAuthenticated: true, user: userFromToken, role: role, loading: false });
     } catch (error) {
         console.error("Error decoding token after login:", error);
         localStorage.removeItem("token");
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token"); // Xóa token khỏi localStorage
     // QUAN TRỌNG: Xóa Authorization header khỏi axiosInstance khi đăng xuất
     delete axiosInstance.defaults.headers.common['Authorization'];
-    setAuthState({ isAuthenticated: false, user: null, roles: null, loading: false });
+    setAuthState({ isAuthenticated: false, user: null, role: null, loading: false });
     toast.success("Logout successfully!");
     navigate("/"); // Chuyển hướng về trang chủ hoặc trang đăng nhập
   };

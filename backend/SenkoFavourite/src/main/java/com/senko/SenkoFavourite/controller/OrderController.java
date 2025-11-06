@@ -27,7 +27,6 @@ public class OrderController {
     private CartService cartService;
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllOrder(){
         try {
             List<OrderDTO> orderDTOList = orderService.getAllOrder();
@@ -68,5 +67,18 @@ public class OrderController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
 
+    }
+
+    @PutMapping("/admin/update-status")
+    public ResponseEntity<?> updateOrderStatus(@RequestParam("orderId") int orderId,
+                                               @RequestParam("status") String status){
+        try{
+            System.out.println("cccc" + orderId + "fefe" + status);
+            orderService.updateOrderStatus(orderId, status);
+            return ResponseEntity.ok("Order status updated");
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

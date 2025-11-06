@@ -40,7 +40,7 @@ public class VNPayService {
         Users user = userRepository.findByUsername(username);
         Address address = addressRepository.findByUser(user).orElse(null);
 
-        if(!user.canOrder()){
+        if(user.canOrder()){
             throw new Exception("Please check your fullname, phone number or address!");
         }
 

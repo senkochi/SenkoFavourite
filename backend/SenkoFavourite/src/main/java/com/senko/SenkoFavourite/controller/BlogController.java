@@ -17,7 +17,16 @@ public class BlogController {
     @GetMapping
     public ResponseEntity<?> getAllBlog(){
         try {
-            return ResponseEntity.ok(blogService.getAllBlog());
+            return ResponseEntity.ok(blogService.getAllBlog("Approved"));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<?> getAllUnapprovedBlog(){
+        try {
+            return ResponseEntity.ok(blogService.getAllBlog("Unapproved"));
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
@@ -39,6 +48,18 @@ public class BlogController {
             blogService.createBlog(dto, username);
             return ResponseEntity.ok("Blog posted successfully!");
         } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/admin/approve")
+    public ResponseEntity<?> updateBlogStatus(@RequestParam int blogId){
+        try {
+            blogService.updateBlogStatus(blogId);
+            System.out.println("cccccc" + blogId);
+            return ResponseEntity.ok("Blog approved/unapproved successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

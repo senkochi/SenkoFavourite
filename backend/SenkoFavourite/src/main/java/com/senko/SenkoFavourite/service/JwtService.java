@@ -34,7 +34,7 @@ public class JwtService {
         String role = user.getRole();
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
-        claims.put("roles", Collections.singletonList(role));
+        claims.put("role", Collections.singletonList(role));
         return buildToken(username, claims);
     }
 

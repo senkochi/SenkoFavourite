@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -53,8 +52,8 @@ public class Users {
     private List<Blog> blogList;
 
     public boolean canOrder(){
-        return fullName != null && !fullName.trim().isEmpty() &&
-                phoneNum != null && !phoneNum.trim().isEmpty() &&
-                address != null && address.isAddressValid();
+        return fullName == null || fullName.trim().isEmpty() ||
+                phoneNum == null || phoneNum.trim().isEmpty() ||
+                address == null || !address.isAddressValid();
     }
 }

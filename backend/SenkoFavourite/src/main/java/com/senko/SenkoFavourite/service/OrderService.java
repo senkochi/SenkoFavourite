@@ -29,7 +29,7 @@ public class OrderService {
     private ProductRepository productRepository;
 
     public List<OrderDTO> getAllOrder(){
-        return orderRepository.findAll().stream().map(order -> new OrderDTO(
+        return orderRepository.findAllByOrderByCreatedAtDesc().stream().map(order -> new OrderDTO(
                 order.getOrderId(),
                 order.getUser().getUsername(),
                 order.getCreatedAt(),
@@ -47,7 +47,7 @@ public class OrderService {
         Users user = userRepository.findByUsername(username);
         Address address = addressRepository.findByUser(user).orElse(null);
 
-        return orderRepository.findByUser(user).stream().map(order -> new OrderDTO(
+        return orderRepository.findByUserOrderByCreatedAtDesc(user).stream().map(order -> new OrderDTO(
                 order.getOrderId(),
                 order.getUser().getUsername(),
                 order.getCreatedAt(),
@@ -62,7 +62,7 @@ public class OrderService {
     }
 
     public UserOrder getOrderByOrderId(int orderId){
-        return orderRepository.findByOrderId(orderId).orElse(null);
+        return orderRepository.findByOrderId(orderId);
     }
 
     public UserOrder saveOrder(UserOrder order){
@@ -88,9 +88,8 @@ public class OrderService {
     public UserOrder createUserOrder(String username, String paymentMethod, List<OrderDetailDTO> orderDetailList) throws Exception {
         Users user = userRepository.findByUsername(username);
         Address address = addressRepository.findByUser(user).orElse(null);
-
-        if(!user.canOrder()){
-            throw new Exception("Please check your fullname, phone number or address!");
+        if(user.canOrder()){
+            throw new Exception("Vui lòng kiểm tra lại họ tên, số điện thoại và địa chỉ!");
         }
 
         UserOrder order = UserOrder.builder()
@@ -118,5 +117,10 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public UserOrder updateOrderStatus(int orderId, String status){
+        UserOrder order = orderRepository.findByOrderId(orderId);
+        order.setStatus(status);
+        return orderRepository.save(order);
+    }
 
 }
