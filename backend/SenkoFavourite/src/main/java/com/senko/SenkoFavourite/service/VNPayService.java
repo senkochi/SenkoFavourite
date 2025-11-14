@@ -3,7 +3,9 @@ package com.senko.SenkoFavourite.service;
 import com.senko.SenkoFavourite.config.VNPayConfig;
 import com.senko.SenkoFavourite.dto.OrderDetailDTO;
 import com.senko.SenkoFavourite.dto.VNPayRequestDTO;
+import com.senko.SenkoFavourite.exception.types.NotFoundException;
 import com.senko.SenkoFavourite.model.*;
+import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import com.senko.SenkoFavourite.repository.AddressRepository;
 import com.senko.SenkoFavourite.repository.OrderRepository;
 import com.senko.SenkoFavourite.repository.ProductRepository;
@@ -49,14 +51,14 @@ public class VNPayService {
                 .createdAt(LocalDateTime.now())
                 .total(0)
                 .status("unpaid")
-                .paymentMethod("VNPAY")
+                .paymentMethod(PaymentMethod.VNPAY)
                 .address(address.toString())
                 .build();
 
         double totalAmount = 0;
 
         for(OrderDetailDTO detail : orderInfo.getOrderDetailList()){
-            Product product = productRepository.findByProductId(detail.getProductId());
+            Product product = productRepository.findByProductId(detail.getProductId()).orElseThrow(() -> new NotFoundException("Product not found"));
             OrderDetail orderDetail = OrderDetail.builder()
                     .product(product)
                     .quantity(detail.getQuantity())

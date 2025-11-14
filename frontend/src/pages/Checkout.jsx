@@ -25,7 +25,7 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("vnpay");
+  const [paymentMethod, setPaymentMethod] = useState("VNPAY");
 
   const handlePaymentChange = (method) => setPaymentMethod(method);
 
@@ -137,8 +137,8 @@ const Checkout = () => {
                 <input
                   type="radio"
                   name="payment"
-                  checked={paymentMethod === "vnpay"}
-                  onChange={() => handlePaymentChange("vnpay")}
+                  checked={paymentMethod === "VNPAY"}
+                  onChange={() => handlePaymentChange("VNPAY")}
                   className="accent-orange-500 w-5 h-5"
                 />
                 <span className={SenkoTheme.radioLabel}>
@@ -150,8 +150,8 @@ const Checkout = () => {
                 <input
                   type="radio"
                   name="payment"
-                  checked={paymentMethod === "cash"}
-                  onChange={() => handlePaymentChange("cash")}
+                  checked={paymentMethod === "COD"}
+                  onChange={() => handlePaymentChange("COD")}
                   className="accent-orange-500 w-5 h-5"
                 />
                 <span className={SenkoTheme.radioLabel}>
@@ -160,7 +160,7 @@ const Checkout = () => {
                 </span>
               </label>
             </div>
-            {paymentMethod === "vnpay" ? (
+            {paymentMethod === "VNPAY" ? (
               <button
                 type="submit"
                 className={SenkoTheme.payBtn}

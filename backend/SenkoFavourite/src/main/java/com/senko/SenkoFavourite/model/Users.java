@@ -54,6 +54,6 @@ public class Users {
     public boolean canOrder(){
         return fullName == null || fullName.trim().isEmpty() ||
                 phoneNum == null || phoneNum.trim().isEmpty() ||
-                address == null || !address.isAddressValid();
+                address == null || address.isAddressValid();
     }
 }

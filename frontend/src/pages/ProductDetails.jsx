@@ -83,7 +83,7 @@ const ProductDetails = () => {
       });
       console.log(product.productId, quantity);
       if (response.status === 200) {
-        toast.success("Sản phẩm đã được thêm vào giỏ hàng!");
+        showToast("Đã thêm sản phẩm vào giỏ hàng!", "success");
         console.log('Product added to cart:', response.data);
       } else {
         setError("Không thể thêm sản phẩm vào giỏ hàng.");

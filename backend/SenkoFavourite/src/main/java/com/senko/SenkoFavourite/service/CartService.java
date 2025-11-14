@@ -58,10 +58,7 @@ public class CartService {
         if (user == null){
             throw new NotFoundException("Đăng nhập để thêm vào giỏ hàng");
         }
-        Product product = productRepository.findByProductId(productId);
-        if(product == null){
-            throw new NotFoundException("Không tìm thấy sản phẩm");
-        }
+        Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NotFoundException("Product not found"));
         if(product.getQuantity()<quantity){
             throw new InsufficientStockException("Không đủ sản phẩn trong kho");
         }
@@ -97,11 +94,7 @@ public class CartService {
             throw new NotFoundException("Cần đăng nhập để thao tác");
         }
 
-        Product product = productRepository.findByProductId(productId);
-        if(product == null){
-            throw new NotFoundException("Không tìm thấy sản phẩm");
-        }
-
+        Product product = productRepository.findByProductId(productId).orElseThrow(() -> new NotFoundException("Product not found"));
         Cart cart = cartRepository.findByUser(user).orElse(null);
 
         CartDetail cartDetail = cartDetailRepository.findByCartAndProduct(cart, product).orElse(null);

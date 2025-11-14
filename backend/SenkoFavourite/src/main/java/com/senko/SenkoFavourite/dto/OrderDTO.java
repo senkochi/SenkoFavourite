@@ -1,5 +1,6 @@
 package com.senko.SenkoFavourite.dto;
 
+import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,5 +20,5 @@ public class OrderDTO {
     private String ward;
     private String district;
     private String province;
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
 }

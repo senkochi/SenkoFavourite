@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Integer>, JpaSpecificationExecutor<Product> {
     Optional<Product> findBySlug(String slug);
-    Product findByProductId(int productId);
+    Optional<Product> findByProductId(int productId);
     List<Product> findTop5ByCategoryAndSlugNot(Category category, String slug);
     List<Product> findTop2ByCategoryAndProductIdLessThanOrderByProductIdAsc(Category category, Integer productId);
     List<Product> findTop2ByCategoryAndProductIdGreaterThanOrderByProductIdAsc(Category category, Integer productId);
@@ -28,4 +28,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
 
     Page<Product> findByCategory(String categoryId, Pageable pageable);
     Page<Product> findByCategory_IdIn(List<Integer> categoryIds, Pageable pageable);
+
+    void deleteByProductId(int productId);
 }

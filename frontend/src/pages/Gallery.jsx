@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 
 const SenkoTheme = {
-  main: "min-h-screen bg-gradient-to-br from-yellow-100 via-orange-100 to-pink-100 flex items-center justify-center font-content",
+  main: "min-h-screen bg-gradient-to-br from-yellow-100 via-orange-100 to-pink-100 flex items-center justify-center font-content mt-20 mb-10 px-4",
   card: "w-full max-w-5xl bg-white rounded-2xl shadow-2xl border-4 border-yellow-300 p-10 flex flex-col gap-10",
   heading: "text-3xl font-bold text-orange-500 mb-2 font-heading text-center",
   section: "mb-8",

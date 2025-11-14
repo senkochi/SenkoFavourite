@@ -40,6 +40,7 @@ public class SecurityEndpoints {
 
     public static final String[] ADMIN_PUT_ENDPOINTS = {
             "/api/order/admin/update-status",
-            "/api/blog//admin/approve",
+            "/api/blog/admin/approve",
+            "/api/products/admin",
     };
 }

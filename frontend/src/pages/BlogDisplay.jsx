@@ -51,7 +51,7 @@ const BlogDisplay = () => {
             Share your thoughts about her to the world
           </p>
         {authState.isAuthenticated ? (
-          <button onClick={() => navigate("/blog/create")} className="bg-gray-400 px-6 py-2 rounded-full text-lg font-content
+          <button onClick={() => navigate("/blogs/create")} className="bg-gray-400 px-6 py-2 rounded-full text-lg font-content
                                     transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
               Create Blog
             </button>
@@ -67,7 +67,7 @@ const BlogDisplay = () => {
       <div className="flex flex-col gap-5 items-center my-8">
 
         {blogs.map((blog) => (
-          <Link key={blog.blogId} to={`/blog/${blog.slug}`}>
+          <Link key={blog.blogId} to={`/blogs/${blog.slug}`}>
             <BlogCard
               title={blog.title}
               briefContent={blog.briefContent}
