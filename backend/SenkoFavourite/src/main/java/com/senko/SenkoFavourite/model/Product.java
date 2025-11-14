@@ -1,5 +1,6 @@
 package com.senko.SenkoFavourite.model;
 
+import com.senko.SenkoFavourite.model.enums.ProductCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,7 @@ public class Product {
     private int productId;
 
     private String name;
-    private Long price;
+    private double price;
     private LocalDate releaseDate;
     private String size;
     private String copyRight;

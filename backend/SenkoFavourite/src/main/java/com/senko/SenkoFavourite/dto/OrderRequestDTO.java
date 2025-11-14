@@ -1,5 +1,6 @@
 package com.senko.SenkoFavourite.dto;
 
+import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import lombok.*;
 
 import java.util.List;
@@ -10,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderRequestDTO {
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
     private List<OrderDetailDTO> orderDetailList;
 }

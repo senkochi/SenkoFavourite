@@ -53,7 +53,7 @@ const Navbar = () => {
                 { to: "/", label: "Home" },
                 { to: "/products", label: "Products" },
                 { to: "/characters", label: "Characters" },
-                { to: "/blog", label: "Blog" },
+                { to: "/blogs", label: "Blogs" },
                 { to: "/gallery", label: "Gallery" },
               ].map((item) => (
                 <li key={item.to} className="md:w-auto w-full">
@@ -93,7 +93,7 @@ const Navbar = () => {
                   style={{ fontFamily: "'Montserrat', 'Poppins', Arial, sans-serif" }}
                   onClick={() => navigate("/user/profile")}
                 >
-                  Xin chào, {authState.user}
+                  Welcome, {authState.user}
                 </span>
               )}
               <button
@@ -101,7 +101,7 @@ const Navbar = () => {
                 style={{ fontFamily: "'Poppins', 'Montserrat', Arial, sans-serif" }}
                 onClick={logout}
               >
-                Đăng xuất
+                Logout
               </button>
             </>
           ) : (

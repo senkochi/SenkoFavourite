@@ -17,35 +17,35 @@ const Footer = () => {
         </div>
         <div>
           <ul className="text-[var(--dark-gray)] font-[var(--content-font)]">
-            <h1>Heading 1</h1>
+            <h1>Senko</h1>
             <li>
-              <a href="#">Content 1</a>
+              <a href="/">Home</a>
             </li>
             <li>
-              <a href="#">Content 2</a>
+              <a href="/product">Products</a>
             </li>
             <li>
-              <a href="#">Content 3</a>
+              <a href="/characters">Characters</a>
             </li>
             <li>
-              <a href="#">Content 4</a>
+              <a href="/blog">Blogs</a>
+            </li>
+            <li>
+              <a href="/gallery">Gallery</a>
             </li>
           </ul>
         </div>
         <div>
           <ul className="text-[var(--dark-gray)] font-[var(--content-font)]">
-            <h1>Heading 1</h1>
+            <h1>Resources</h1>
             <li>
-              <a href="#">Content 1</a>
+              <a href="#">FAQs</a>
             </li>
             <li>
-              <a href="#">Content 2</a>
+              <a href="#">Documentations</a>
             </li>
             <li>
-              <a href="#">Content 3</a>
-            </li>
-            <li>
-              <a href="#">Content 4</a>
+              <a href="#">Source</a>
             </li>
           </ul>
         </div>

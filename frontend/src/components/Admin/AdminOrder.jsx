@@ -13,31 +13,6 @@ const STATUS_OPTIONS = [
   "Đã hủy"
 ];
 
-const initialOrders = [
-  {
-    id: "#001",
-    customer: "Nguyễn Văn A",
-    date: "2024-10-01",
-    total: "500.000 VND",
-    status: "Đã giao",
-    items: [
-      { name: "Senko Figure", quantity: 1, price: "300.000 VND" },
-      { name: "Senko Keychain", quantity: 2, price: "100.000 VND" }
-    ]
-  },
-  {
-    id: "#002",
-    customer: "Trần Thị B",
-    date: "2024-10-02",
-    total: "1.200.000 VND",
-    status: "Đang xử lý",
-    items: [
-      { name: "Senko T-shirt", quantity: 2, price: "600.000 VND" }
-    ]
-  }
-];
-
-
 const Order = () => {
   const [orders, setOrders] = useState([]);
   const [popupIdx, setPopupIdx] = useState(null);

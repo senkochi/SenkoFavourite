@@ -23,14 +23,13 @@ import ForgotPassword from './pages/ForgotPassword';
 import VnpayReturn from './pages/VnpayReturn';
 import ImageGallery from './pages/ImageGallery';
 import { AuthContext } from "./context/AuthContext";
-import { Toaster } from "react-hot-toast";
 import { useContext } from 'react';
 import BlogDisplay from './pages/BlogDisplay';
+import AdminProductEdit from './components/Admin/AdminProductEdit';
+import AdminProductNew from './components/Admin/AdminProductNew';
 
 
 const App = () => {
-
-  const authState = useContext(AuthContext);
 
   return (
     <div>
@@ -43,9 +42,9 @@ const App = () => {
             <Route path='/characters' element={<CharacterDisplay />}></Route>
             <Route path='/characters/:character' element={<Characters />}></Route>
             <Route path='/about' element={<About />}></Route>
-            <Route path='/blog' element={<BlogDisplay />}></Route>
-            <Route path='/blog/:slug' element={<Blog />}></Route>
-            <Route path='/blog/create' element={<BlogCreate />}></Route>
+            <Route path='/blogs' element={<BlogDisplay />}></Route>
+            <Route path='/blogs/:slug' element={<Blog />}></Route>
+            <Route path='/blogs/create' element={<BlogCreate />}></Route>
             <Route path='/gallery' element={<Gallery />}></Route>
             <Route path='/products/:slug' element={<ProductDetails />}></Route>
             <Route path='/cart' element={<Cart />}></Route>
@@ -55,6 +54,8 @@ const App = () => {
             <Route path='/user/profile' element={<Profile />}></Route>
             <Route path="/oauth2/success" element={<OAuth2Success />} />
             <Route path='/admin/:tab' element={<Dashboard />}></Route>
+            <Route path='/admin/products/edit/:slug' element={<AdminProductEdit />}></Route>
+            <Route path='/admin/products/new' element={<AdminProductNew />}></Route>
             <Route path='/forgot-password' element={<ForgotPassword />}></Route>
             <Route path='/vnpay-return' element={<VnpayReturn />}></Route>
             <Route path='/gallery/all' element={<ImageGallery />}></Route>

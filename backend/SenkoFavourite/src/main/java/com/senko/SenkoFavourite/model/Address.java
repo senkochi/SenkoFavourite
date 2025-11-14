@@ -26,7 +26,7 @@ public class Address {
     @Column
     private String province;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private Users user;
 

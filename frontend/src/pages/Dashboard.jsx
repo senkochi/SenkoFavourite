@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import SenkoLogo from "/Senko.png"; // Đổi đường dẫn nếu cần
 import AdminOrder from "../components/Admin/AdminOrder";
 import AdminBlog from "../components/Admin/AdminBlog";
+import AdminProduct from "../components/Admin/AdminProduct";
 
 const senkoTheme = {
   main: "min-h-screen bg-gradient-to-br from-yellow-100 via-orange-100 to-pink-100 flex items-center justify-center font-content mt-7",
@@ -17,12 +18,12 @@ const senkoTheme = {
 };
 
 const tabs = [
-  { key: "dashboard", label: "Tổng quan" },
-  { key: "orders", label: "Đơn hàng" },
+  { key: "dashboard", label: "Overall" },
+  { key: "orders", label: "Orders" },
   { key: "blog-request", label: "Blog Requests" },
-  { key: "products", label: "Sản phẩm" },
-  { key: "users", label: "Người dùng" },
-  { key: "settings", label: "Cài đặt" }
+  { key: "products", label: "Products" },
+  { key: "users", label: "Users" },
+  { key: "settings", label: "Settings" }
 ];
 
 function SenkoDashboard() {
@@ -93,6 +94,11 @@ function SenkoDashboard() {
             {currentTab === "blog-request" && (
               <>
                 <AdminBlog />
+              </>
+            )}
+            {currentTab === "products" && (
+              <>
+                <AdminProduct />
               </>
             )}
           </section>

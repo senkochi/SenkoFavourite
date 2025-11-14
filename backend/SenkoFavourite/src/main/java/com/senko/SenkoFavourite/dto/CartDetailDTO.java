@@ -13,6 +13,6 @@ public class CartDetailDTO {
     private int productId;
     private String productName;
     private String imgURL;
-    private Long price;
+    private double price;
     private int quantity;
 }

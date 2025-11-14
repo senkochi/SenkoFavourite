@@ -56,7 +56,7 @@ public class CartServiceTest {
         cart.setUser(user);
 
         when(userRepository.findByUsername(username)).thenReturn(user);
-        when(productRepository.findByProductId(productId)).thenReturn(product);
+        when(productRepository.findByProductId(productId)).thenReturn(Optional.of(product));
         when(cartRepository.findByUser(user)).thenReturn(Optional.of(cart));
         when(cartDetailRepository.findByCartAndProduct(cart, product)).thenReturn(Optional.empty());
 

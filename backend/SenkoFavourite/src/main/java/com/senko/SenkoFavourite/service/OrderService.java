@@ -2,7 +2,9 @@ package com.senko.SenkoFavourite.service;
 
 import com.senko.SenkoFavourite.dto.OrderDTO;
 import com.senko.SenkoFavourite.dto.OrderDetailDTO;
+import com.senko.SenkoFavourite.exception.types.NotFoundException;
 import com.senko.SenkoFavourite.model.*;
+import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import com.senko.SenkoFavourite.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ public class OrderService {
 
     public List<OrderDTO> getOrderByUsername(String username){
         Users user = userRepository.findByUsername(username);
-        Address address = addressRepository.findByUser(user).orElse(null);
+        Address address = user.getAddress();
 
         return orderRepository.findByUserOrderByCreatedAtDesc(user).stream().map(order -> new OrderDTO(
                 order.getOrderId(),
@@ -85,10 +87,9 @@ public class OrderService {
     }
 
     @Transactional
-    public UserOrder createUserOrder(String username, String paymentMethod, List<OrderDetailDTO> orderDetailList) throws Exception {
+    public UserOrder createUserOrder(String username, PaymentMethod paymentMethod, List<OrderDetailDTO> orderDetailList) throws Exception {
         Users user = userRepository.findByUsername(username);
-        Address address = addressRepository.findByUser(user).orElse(null);
-        if(user.canOrder()){
+        if(!user.canOrder()){
             throw new Exception("Vui lòng kiểm tra lại họ tên, số điện thoại và địa chỉ!");
         }
 
@@ -98,13 +99,15 @@ public class OrderService {
                 .total(0)
                 .status("Processing")
                 .paymentMethod(paymentMethod)
-                .address(address.toString())
+                .address(user.getAddress().toString())
                 .build();
 
         double totalAmount = 0;
 
         for(OrderDetailDTO detail : orderDetailList){
-            Product product = productRepository.findByProductId(detail.getProductId());
+            Product product = productRepository.findByProductId(detail.getProductId()).orElseThrow(() -> new NotFoundException("Product not found"));
+            product.setQuantity(product.getQuantity() - detail.getQuantity());
+            productRepository.save(product);
             OrderDetail orderDetail = OrderDetail.builder()
                     .product(product)
                     .quantity(detail.getQuantity())

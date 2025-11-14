@@ -1,5 +1,6 @@
 package com.senko.SenkoFavourite.model;
 
+import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,7 +34,8 @@ public class UserOrder {
     private String status;
 
     @Column(name = "payment_method")
-    private String paymentMethod;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
@@ -55,4 +57,7 @@ public class UserOrder {
             detail.setOrder(null); // <-- Gỡ bỏ mối quan hệ
         }
     }
+
 }
+
+
