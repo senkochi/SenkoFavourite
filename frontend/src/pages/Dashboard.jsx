@@ -4,6 +4,8 @@ import SenkoLogo from "/Senko.png"; // Đổi đường dẫn nếu cần
 import AdminOrder from "../components/Admin/AdminOrder";
 import AdminBlog from "../components/Admin/AdminBlog";
 import AdminProduct from "../components/Admin/AdminProduct";
+import axiosInstance from "../utils/axiosInstance";
+import { useToast } from "../context/ToastContext";
 
 const senkoTheme = {
   main: "min-h-screen bg-gradient-to-br from-yellow-100 via-orange-100 to-pink-100 flex items-center justify-center font-content mt-7",
@@ -31,7 +33,14 @@ function SenkoDashboard() {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("token") !== null;
   const currentTab = tab || "dashboard";
+  const [waitingOrders, setWaitingOrders] = React.useState(0);
+  const [blogRequests, setBlogRequests] = React.useState(0);
+  const [productsCount, setProductsCount] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
 
+  const { addToast } = useToast();
+
+  //Nếu chưa đăng nhập thì chuyển về trang login
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -41,6 +50,36 @@ function SenkoDashboard() {
       document.body.style.overflow = "";
     };
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+  setLoading(true);
+
+  const fetchStats = async () => {
+    try {
+      const res = await axiosInstance.get("/api/admin/statistics");
+      if (res && res.status === 200) {
+        const data = res.data;
+        console.log("[Dashboard] data:", data);
+        setWaitingOrders(data.waitingOrders ?? 0);
+        setBlogRequests(data.blogRequests ?? 0);
+        setProductsCount(data.productQuantity ?? 0);
+      } else {
+        console.warn("[Dashboard] unexpected response:", res);
+        addToast("Error fetching statistics", "error");
+      }
+    } catch (error) {
+      console.error("[Dashboard] fetch error:", error);
+      addToast("Error fetching statistics", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchStats();
+
+  return () => {
+  };
+}, [addToast]);
 
   return (
     <div className={senkoTheme.main}>
@@ -72,16 +111,16 @@ function SenkoDashboard() {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="bg-white rounded-xl shadow border-2 border-yellow-200 p-8 flex flex-col items-center min-w-[220px]">
-                    <span className="text-5xl font-bold text-orange-500">120</span>
-                    <span className="text-orange-700 font-semibold mt-4 text-lg">Đơn hàng hôm nay</span>
+                    <span className="text-5xl font-bold text-orange-500">{waitingOrders}</span>
+                    <span className="text-orange-700 font-semibold mt-4 text-lg">Waiting orders</span>
                   </div>
                   <div className="bg-white rounded-xl shadow border-2 border-yellow-200 p-8 flex flex-col items-center min-w-[220px]">
-                    <span className="text-5xl font-bold text-orange-500">8</span>
+                    <span className="text-5xl font-bold text-orange-500">{blogRequests}</span>
                     <span className="text-orange-700 font-semibold mt-4 text-lg">Blog requests</span>
                   </div>
                   <div className="bg-white rounded-xl shadow border-2 border-yellow-200 p-8 flex flex-col items-center min-w-[220px]">
-                    <span className="text-5xl font-bold text-orange-500">5</span>
-                    <span className="text-orange-700 font-semibold mt-4 text-lg">Sản phẩm mới</span>
+                    <span className="text-5xl font-bold text-orange-500">{productsCount}</span>
+                    <span className="text-orange-700 font-semibold mt-4 text-lg">Products</span>
                   </div>
                 </div>
               </>

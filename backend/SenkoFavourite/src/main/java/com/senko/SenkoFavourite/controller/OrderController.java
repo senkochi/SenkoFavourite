@@ -4,6 +4,7 @@ import com.senko.SenkoFavourite.dto.OrderDTO;
 import com.senko.SenkoFavourite.dto.OrderDetailDTO;
 import com.senko.SenkoFavourite.dto.OrderRequestDTO;
 import com.senko.SenkoFavourite.model.UserOrder;
+import com.senko.SenkoFavourite.model.enums.OrderStatus;
 import com.senko.SenkoFavourite.service.CartService;
 import com.senko.SenkoFavourite.service.OrderService;
 import lombok.Getter;

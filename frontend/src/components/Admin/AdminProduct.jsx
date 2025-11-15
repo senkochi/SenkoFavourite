@@ -10,7 +10,7 @@ const senkoStyles = {
   headingWrap: "flex items-center justify-between mb-6",
   title: "text-2xl font-bold text-orange-500",
   addBtn: "px-4 py-2 bg-orange-400 text-white rounded-full hover:bg-orange-500 transition shadow",
-  tableWrap: "overflow-x-auto",
+  tableWrap: "overflow-x-auto h-[330px]",
   table: "min-w-[900px] w-full bg-orange-50 rounded-xl shadow border border-orange-200",
   th: "py-3 px-4 text-left text-orange-700",
   td: "py-3 px-4 align-top",

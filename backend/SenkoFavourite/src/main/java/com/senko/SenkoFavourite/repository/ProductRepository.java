@@ -26,6 +26,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
             Pageable pageable
     );
 
+    @Query("SELECT COUNT(p) FROM Product p")
+    long getProductTypeQuantity();
+
     Page<Product> findByCategory(String categoryId, Pageable pageable);
     Page<Product> findByCategory_IdIn(List<Integer> categoryIds, Pageable pageable);
 

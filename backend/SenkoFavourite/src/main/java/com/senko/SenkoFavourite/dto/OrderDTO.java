@@ -1,5 +1,6 @@
 package com.senko.SenkoFavourite.dto;
 
+import com.senko.SenkoFavourite.model.enums.OrderStatus;
 import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import lombok.*;
 

@@ -3,6 +3,7 @@ package com.senko.SenkoFavourite.controller;
 import com.senko.SenkoFavourite.config.VNPayConfig;
 import com.senko.SenkoFavourite.dto.VNPayRequestDTO;
 import com.senko.SenkoFavourite.model.UserOrder;
+import com.senko.SenkoFavourite.model.enums.OrderStatus;
 import com.senko.SenkoFavourite.service.OrderService;
 import com.senko.SenkoFavourite.service.VNPayService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -79,16 +80,16 @@ public class VNPayController {
             String vnp_TransactionStatus = fields.get("vnp_TransactionStatus");
             UserOrder order = orderService.getOrderByOrderId(Integer.parseInt( fields.get("vnp_TxnRef") ));
             if(order == null){
-                System.out.println("No fkn order found");
+                System.out.println("No order found");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found!");
             }
             if (vnp_TransactionStatus.equals("00")){
-                order.setStatus("Processing");
+                order.setStatus(OrderStatus.VNPAY);
                 orderService.saveOrder(order);
                 System.out.println("Order cancelled");
                 return ResponseEntity.ok("Success");
             } else {
-                order.setStatus("Cancelled");
+                order.setStatus(OrderStatus.CANCELLED);
                 orderService.saveOrder(order);
                 System.out.println("Order cancelled");
                 return ResponseEntity.ok("Failed");
