@@ -1,5 +1,6 @@
 package com.senko.SenkoFavourite.model;
 
+import com.senko.SenkoFavourite.model.enums.OrderStatus;
 import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,7 +32,8 @@ public class UserOrder {
     private double total;
 
     @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     @Column(name = "payment_method")
     @Enumerated(EnumType.STRING)

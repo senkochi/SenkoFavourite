@@ -4,6 +4,7 @@ import com.senko.SenkoFavourite.dto.OrderDTO;
 import com.senko.SenkoFavourite.dto.OrderDetailDTO;
 import com.senko.SenkoFavourite.exception.types.NotFoundException;
 import com.senko.SenkoFavourite.model.*;
+import com.senko.SenkoFavourite.model.enums.OrderStatus;
 import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import com.senko.SenkoFavourite.repository.*;
 import jakarta.transaction.Transactional;
@@ -35,7 +36,7 @@ public class OrderService {
                 order.getOrderId(),
                 order.getUser().getUsername(),
                 order.getCreatedAt(),
-                order.getStatus(),
+                order.getStatus().getDisplayValue(),
                 order.getTotal(),
                 order.getUser().getAddress().getParticular(),
                 order.getUser().getAddress().getWard(),
@@ -53,7 +54,7 @@ public class OrderService {
                 order.getOrderId(),
                 order.getUser().getUsername(),
                 order.getCreatedAt(),
-                order.getStatus(),
+                order.getStatus().getDisplayValue(),
                 order.getTotal(),
                 address.getParticular(),
                 address.getWard(),
@@ -93,11 +94,13 @@ public class OrderService {
             throw new Exception("Vui lòng kiểm tra lại họ tên, số điện thoại và địa chỉ!");
         }
 
+        OrderStatus status = (paymentMethod == PaymentMethod.VNPAY) ? OrderStatus.VNPAY : OrderStatus.COD;
+
         UserOrder order = UserOrder.builder()
                 .user(user)
                 .createdAt(LocalDateTime.now())
                 .total(0)
-                .status("Processing")
+                .status(status)
                 .paymentMethod(paymentMethod)
                 .address(user.getAddress().toString())
                 .build();
@@ -122,7 +125,7 @@ public class OrderService {
 
     public UserOrder updateOrderStatus(int orderId, String status){
         UserOrder order = orderRepository.findByOrderId(orderId);
-        order.setStatus(status);
+        order.setStatus(OrderStatus.valueOf(status));
         return orderRepository.save(order);
     }
 

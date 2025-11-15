@@ -6,11 +6,10 @@ import { formatDate } from '../../hook/dateProcess';
 const STATUS_OPTIONS = [
   "COD",
   "VNPAY",
-  "Chờ xác nhận",
-  "Đã xác nhận",
-  "Đang vận chuyển",
-  "Đã giao",
-  "Đã hủy"
+  "CONFIRMED",
+  "DELIVERING",
+  "DELIVERED",
+  "CANCELED"
 ];
 
 const Order = () => {

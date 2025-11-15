@@ -5,6 +5,7 @@ import com.senko.SenkoFavourite.dto.OrderDetailDTO;
 import com.senko.SenkoFavourite.dto.VNPayRequestDTO;
 import com.senko.SenkoFavourite.exception.types.NotFoundException;
 import com.senko.SenkoFavourite.model.*;
+import com.senko.SenkoFavourite.model.enums.OrderStatus;
 import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import com.senko.SenkoFavourite.repository.AddressRepository;
 import com.senko.SenkoFavourite.repository.OrderRepository;
@@ -50,7 +51,7 @@ public class VNPayService {
                 .user(user)
                 .createdAt(LocalDateTime.now())
                 .total(0)
-                .status("unpaid")
+                .status(OrderStatus.VNPAY)
                 .paymentMethod(PaymentMethod.VNPAY)
                 .address(address.toString())
                 .build();
