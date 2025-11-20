@@ -44,7 +44,12 @@ public class UserOrder {
 
     private String address;
 
-    // Helper methods để quản lý mối quan hệ hai chiều (khuyến nghị)
+    @Column
+    private boolean reviewed ;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Feedback> feedbacks;
+
     public void addOrderDetail(OrderDetail detail) {
         if (this.orderDetails == null) {
             this.orderDetails = new ArrayList<>();

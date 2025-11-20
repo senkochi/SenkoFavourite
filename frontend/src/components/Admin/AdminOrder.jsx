@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminOrderPopup from './AdminOrderPopup';
 import axiosInstance from '../../utils/axiosInstance';
 import { formatDate } from '../../hook/dateProcess';
+import { useToast } from '../../context/ToastContext';
 
 const STATUS_OPTIONS = [
   "COD",
@@ -16,6 +17,8 @@ const Order = () => {
   const [orders, setOrders] = useState([]);
   const [popupIdx, setPopupIdx] = useState(null);
 
+  const { addToast } = useToast();
+
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -23,6 +26,7 @@ const Order = () => {
         setOrders(response.data);
       } catch (error) {
         console.error('Error fetching order details:', error);
+        addToast('Lỗi khi tải dữ liệu đơn hàng', 'error');
       }
     };
 
@@ -39,9 +43,11 @@ const Order = () => {
     );
     if (response.status === 200) {
       console.log('Cập nhật trạng thái thành công');
+      addToast('Order status updated successfully', 'success');
     }
     else {
       console.error('Error updating order status:', response);
+      addToast('Error updating order status', 'error');
     }
   };
 

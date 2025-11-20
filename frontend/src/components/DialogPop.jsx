@@ -8,22 +8,21 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import Divider from '@mui/material/Divider';
+import Divider from "@mui/material/Divider";
 import OrderDetailCard from "./OrderDetailCard";
 import axiosInstance from "../utils/axiosInstance";
 
 const DialogPop = (props) => {
-
   const [loading, setLoading] = React.useState(true);
   const [orders, setOrders] = React.useState([]);
 
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     "& .MuiDialogContent-root": {
       padding: theme.spacing(2),
-      maxHeight: '70vh', // Giới hạn chiều cao tối đa của nội dung (ví dụ: 70% chiều cao viewport)
-      overflowY: 'auto', // Thêm thanh cuộn dọc khi nội dung tràn
+      maxHeight: "70vh",
+      overflowY: "auto",
     },
-    "& .MuiDialogActions-root": { 
+    "& .MuiDialogActions-root": {
       padding: theme.spacing(1),
     },
   }));
@@ -40,9 +39,11 @@ const DialogPop = (props) => {
   React.useEffect(() => {
     const fetchOrderHistory = async () => {
       setLoading(true);
-      const response = await axiosInstance.get(`/api/order/detail/${props.orderId}`);
+      const response = await axiosInstance.get(
+        `/api/order/detail/${props.orderId}`
+      );
       if (response.status !== 200) {
-        console.error('Failed to fetch order history');
+        console.error("Failed to fetch order history");
         setLoading(false);
         return;
       }
@@ -59,7 +60,17 @@ const DialogPop = (props) => {
 
   return (
     <React.Fragment>
-      <Button variant="contained" onClick={handleClickOpen}>
+      <Button
+        variant="contained"
+        onClick={handleClickOpen}
+        sx={{
+          fontFamily: 'Poppins, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+          fontWeight: 600,
+          textTransform: "none",
+          letterSpacing: "0.2px",
+          fontSize: "0.95rem",
+        }}
+      >
         View
       </Button>
       <BootstrapDialog
@@ -83,8 +94,10 @@ const DialogPop = (props) => {
           <CloseIcon />
         </IconButton>
         <div>
-          <h2 className="mx-5">Address : <span>{props.address}</span></h2>
-              <OrderDetailCard className='w-full' orders={orders} />
+          <h2 className="mx-5">
+            Address : <span>{props.address}</span>
+          </h2>
+          <OrderDetailCard className="w-full" orders={orders} />
         </div>
       </BootstrapDialog>
     </React.Fragment>

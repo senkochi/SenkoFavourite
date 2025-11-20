@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import DialogPop from './DialogPop';
 import axiosInstance from '../utils/axiosInstance';
 import formatDate from '../utils/dateFormat';
+import { useNavigate } from 'react-router-dom';
+import FeedbackPop from './FeedbackPop';
 
 const SenkoTheme = {
   bg: "bg-gradient-to-br from-yellow-100 via-orange-100 to-pink-100 min-h-screen",
@@ -18,9 +20,29 @@ const SenkoTheme = {
   noOrder: "py-4 text-center text-orange-400 font-content",
 };
 
+const OrderStatus = {
+  all: "ALL",
+  processing: "PENDING",
+  confirmed: "CONFIRMED",
+  delivering: "DELIVERING", 
+  delivered: "DELIVERED",
+  cancelled: "CANCELLED",
+}
+
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [status, setStatus] = useState(OrderStatus.all)
+
+  const filterByStatus = (order) => {
+    if (status === OrderStatus.all) return true;
+    return order.status === status;
+  }
+
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value);
+  }
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
@@ -58,16 +80,18 @@ const OrderHistory = () => {
           />
           <h3 className={SenkoTheme.heading}>Senko-san Order History</h3>
           <div className="ml-auto">
-            <select className={SenkoTheme.select}>
-              <option>All orders</option>
-              <option>Completed</option>
-              <option>Processing</option>
-              <option>Cancelled</option>
+            <select className={SenkoTheme.select} value={status} onChange={handleStatusChange}>
+              <option value={OrderStatus.all}>{OrderStatus.all}</option>
+              <option value={OrderStatus.processing}>{OrderStatus.processing}</option>
+              <option value={OrderStatus.confirmed}>{OrderStatus.confirmed}</option>
+              <option value={OrderStatus.delivering}>{OrderStatus.delivering}</option>
+              <option value={OrderStatus.delivered}>{OrderStatus.delivered}</option>
+              <option value={OrderStatus.cancelled}>{OrderStatus.cancelled}</option>
             </select>
           </div>
         </div>
         <div className="divide-y divide-yellow-100 mt-4">
-          {orders && orders.length > 0 ? orders.map((order) => (
+          {orders && orders.length > 0 ? orders.filter(filterByStatus).map((order) => (
             <div className={SenkoTheme.orderRow} key={order.orderId}>
               <div>
                 <p className={SenkoTheme.label}>Order ID:</p>
@@ -86,8 +110,10 @@ const OrderHistory = () => {
                 <span className={SenkoTheme.price}>${order.total}.00</span>
               </div>
               <div className="flex md:flex-wrap gap-4 lg:justify-end max-md:col-span-full">
-                <button type="button" className={SenkoTheme.btn}>Buy again</button>
-                <DialogPop orderId={order.orderId} address={`${order.particular}, ${order.ward}, ${order.district}, ${order.province}`} />
+              {order.status === "DELIVERED" ? (
+                <FeedbackPop id={order.orderId} address={`${order.particular}, ${order.ward}, ${order.district}, ${order.province}`} />
+              ) : null}
+              <DialogPop orderId={order.orderId} address={`${order.particular}, ${order.ward}, ${order.district}, ${order.province}`} />
               </div>
             </div>
           )) : (

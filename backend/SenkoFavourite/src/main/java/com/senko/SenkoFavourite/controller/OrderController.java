@@ -1,11 +1,14 @@
 package com.senko.SenkoFavourite.controller;
 
+import com.senko.SenkoFavourite.dto.FeedbackDTO;
 import com.senko.SenkoFavourite.dto.OrderDTO;
 import com.senko.SenkoFavourite.dto.OrderDetailDTO;
 import com.senko.SenkoFavourite.dto.OrderRequestDTO;
 import com.senko.SenkoFavourite.model.UserOrder;
 import com.senko.SenkoFavourite.model.enums.OrderStatus;
+import com.senko.SenkoFavourite.repository.FeedbackRepository;
 import com.senko.SenkoFavourite.service.CartService;
+import com.senko.SenkoFavourite.service.FeedbackService;
 import com.senko.SenkoFavourite.service.OrderService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class OrderController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private FeedbackService feedbackService;
 
     @GetMapping("/admin")
     public ResponseEntity<?> getAllOrder(){
@@ -82,4 +88,11 @@ public class OrderController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/{id}/feedbacks")
+    public ResponseEntity<?> createFeedbacks(@PathVariable int id, @RequestBody List<FeedbackDTO> feedbackDTOList){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(feedbackService.createFeedbacks(id, username, feedbackDTOList));
+    }
+
 }

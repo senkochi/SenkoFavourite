@@ -1,11 +1,11 @@
 package com.senko.SenkoFavourite.service;
 
+import com.senko.SenkoFavourite.dto.FeedbackDTO;
 import com.senko.SenkoFavourite.dto.ProductDTO;
+import com.senko.SenkoFavourite.dto.UserDTO;
 import com.senko.SenkoFavourite.exception.types.NotFoundException;
 import com.senko.SenkoFavourite.mapper.ProductMapper;
-import com.senko.SenkoFavourite.model.Category;
-import com.senko.SenkoFavourite.model.Manufacturer;
-import com.senko.SenkoFavourite.model.Product;
+import com.senko.SenkoFavourite.model.*;
 import com.senko.SenkoFavourite.model.enums.ProductCategory;
 import com.senko.SenkoFavourite.repository.CategoryRepository;
 import com.senko.SenkoFavourite.repository.ManufacturerRepository;
@@ -38,6 +38,8 @@ public class ProductService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
+
+
     public List<ProductDTO> getAllProductDTOs(){
         return productMapper.toDTOList(productRepository.findAll());
     }
@@ -45,6 +47,25 @@ public class ProductService {
     public ProductDTO getBySlug(String slug){
         Product product = productRepository.findBySlug(slug).orElseThrow(() -> new NotFoundException("Product not found"));
         System.out.println("Id sản phẩm hiện tại là: " + product.getProductId());
+
+        List<Feedback> feedbacks = product.getFeedbackList();
+        List<FeedbackDTO> feedbackDTOs = feedbacks.stream().map(feedback -> {
+            Users user = feedback.getUser();
+            UserDTO userDTO = UserDTO.builder()
+                    .email(user.getEmail())
+                    .imgURL(user.getImgURL())
+                    .phoneNum(user.getPhoneNum())
+                    .username(user.getUsername())
+                    .fullName(user.getFullName())
+                    .build();
+            return FeedbackDTO.builder()
+                    .productId(feedback.getProduct().getProductId())
+                    .rating(feedback.getRating())
+                    .createdAt(feedback.getCreatedAt())
+                    .content(feedback.getContent())
+                    .user(userDTO)
+                    .build();
+        }).toList();
 
         return ProductDTO.builder()
                 .productId(product.getProductId())
@@ -60,6 +81,7 @@ public class ProductService {
                 .artist(product.getArtist())
                 .manufacturerName(product.getManufacturer().getName())
                 .categoryName(product.getCategory().getName())
+                .feedbacks(feedbackDTOs)
                 .build();
     }
 

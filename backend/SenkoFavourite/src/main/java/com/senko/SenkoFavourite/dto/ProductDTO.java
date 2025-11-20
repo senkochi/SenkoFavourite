@@ -3,6 +3,7 @@ package com.senko.SenkoFavourite.dto;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +24,5 @@ public class ProductDTO {
     private String imageURL;
     private String slug;
     private String artist;
+    private List<FeedbackDTO> feedbacks;
 }
