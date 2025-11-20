@@ -22,4 +22,5 @@ public class OrderDTO {
     private String district;
     private String province;
     private PaymentMethod paymentMethod;
+    private boolean reviewed;
 }

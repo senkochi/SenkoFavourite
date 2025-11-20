@@ -41,4 +41,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductImage> imageList;
+
+    @OneToMany(mappedBy = "product")
+    private List<Feedback> feedbackList;
 }

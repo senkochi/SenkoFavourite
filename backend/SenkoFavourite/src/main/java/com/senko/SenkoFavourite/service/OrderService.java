@@ -42,7 +42,8 @@ public class OrderService {
                 order.getUser().getAddress().getWard(),
                 order.getUser().getAddress().getDistrict(),
                 order.getUser().getAddress().getProvince(),
-                order.getPaymentMethod()
+                order.getPaymentMethod(),
+                false
         )).toList();
     }
 
@@ -60,7 +61,8 @@ public class OrderService {
                 address.getWard(),
                 address.getDistrict(),
                 address.getProvince(),
-                order.getPaymentMethod()
+                order.getPaymentMethod(),
+                false
         )).toList();
     }
 
@@ -94,7 +96,7 @@ public class OrderService {
             throw new Exception("Vui lòng kiểm tra lại họ tên, số điện thoại và địa chỉ!");
         }
 
-        OrderStatus status = (paymentMethod == PaymentMethod.VNPAY) ? OrderStatus.VNPAY : OrderStatus.COD;
+        OrderStatus status = OrderStatus.PENDING;
 
         UserOrder order = UserOrder.builder()
                 .user(user)
@@ -103,6 +105,7 @@ public class OrderService {
                 .status(status)
                 .paymentMethod(paymentMethod)
                 .address(user.getAddress().toString())
+                .reviewed(false)
                 .build();
 
         double totalAmount = 0;

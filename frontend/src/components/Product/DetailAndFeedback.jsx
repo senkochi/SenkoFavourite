@@ -5,6 +5,8 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Overall from "./Overall";
 import Feedbacks from "./Feedbacks";
+import Rating from "@mui/material/Rating";
+import formatDate from "../../utils/dateFormat";
 
 const DetailAndFeedback = ({ product }) => {
   const [value, setValue] = React.useState(0);
@@ -65,7 +67,51 @@ const DetailAndFeedback = ({ product }) => {
           )}
           {value === 1 && (
             <Box sx={{ mt: 1 }}>
-              <Feedbacks />
+              {product.feedbacks.length > 0 ? (
+                product.feedbacks.map((fbs, idx) => (
+                  <div key={idx} className="w-full max-w-6xl px-4">
+                    <article>
+                      <div className="flex items-center mb-4">
+                        <img
+                          className="w-10 h-10 me-4 rounded-full"
+                          src={fbs.user.imgURL}
+                          alt=""
+                        />
+
+                        <div className="font-medium dark:text-white">
+                          <p>
+                            {fbs.user.fullName}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center mb-1 space-x-1 rtl:space-x-reverse">
+                        <Rating
+                name="text-feedback"
+                value={fbs.rating}
+                readOnly
+                precision={0.5}
+              />
+                      </div>
+                      <footer className="mb-5 text-sm text-gray-500 dark:text-gray-400">
+                        <p>
+                          {formatDate(fbs.createdAt)}
+                        </p>
+                      </footer>
+                      <p className="mb-2 text-gray-500 dark:text-gray-400">
+                        {fbs.content}
+                      </p>
+                      <a
+                        href="#"
+                        className="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
+                      >
+                        Read more
+                      </a>
+                    </article>
+                  </div>
+                ))
+              ) : (
+                <Typography>No ratings available for this product.</Typography>
+              )}
             </Box>
           )}
         </Box>

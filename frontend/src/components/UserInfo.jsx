@@ -278,7 +278,6 @@ const UserInfo = ({ loading, setLoading }) => {
               value={userInfo?.username || ""}
               onChange={handleChange}
               disabled={!editMode}
-              placeholder="Chưa có username"
             />
           </div>
           <div>
@@ -290,7 +289,7 @@ const UserInfo = ({ loading, setLoading }) => {
               value={userInfo?.fullName || ""}
               onChange={handleChange}
               disabled={!editMode}
-              placeholder="Chưa có họ tên"
+              placeholder="Full name"
             />
           </div>
           <div className="md:col-span-2">
@@ -302,7 +301,7 @@ const UserInfo = ({ loading, setLoading }) => {
               value={userInfo?.email || ""}
               onChange={handleChange}
               disabled
-              placeholder="Chưa có email"
+              placeholder="Email address"
             />
           </div>
           <div className="md:col-span-2">
@@ -314,18 +313,18 @@ const UserInfo = ({ loading, setLoading }) => {
               value={userInfo?.phoneNum || ""}
               onChange={handleChange}
               disabled={!editMode}
-              placeholder="Chưa có số điện thoại"
+              placeholder="Phone number"
             />
           </div>
           <div>
-            <label className={SenkoTheme.label}>Tỉnh/Thành phố</label>
+            <label className={SenkoTheme.label}>Province/City</label>
             <select
               className={SenkoTheme.select}
               value={selectedProvince}
               onChange={handleProvinceChange}
               disabled={!editMode}
             >
-              <option value="">Chọn tỉnh/thành</option>
+              <option value="">Select Province/City</option>
               {provinces.map((p) => (
                 <option key={p.code} value={p.code}>
                   {p.name}
@@ -334,14 +333,14 @@ const UserInfo = ({ loading, setLoading }) => {
             </select>
           </div>
           <div>
-            <label className={SenkoTheme.label}>Quận/Huyện</label>
+            <label className={SenkoTheme.label}>District</label>
             <select
               className={SenkoTheme.select}
               value={selectedDistrict}
               onChange={handleDistrictChange}
               disabled={!editMode || !selectedProvince}
             >
-              <option value="">Chọn quận/huyện</option>
+              <option value="">Select District</option>
               {districts.map((d) => (
                 <option key={d.code} value={d.code}>
                   {d.name}
@@ -350,14 +349,14 @@ const UserInfo = ({ loading, setLoading }) => {
             </select>
           </div>
           <div className="md:col-span-2">
-            <label className={SenkoTheme.label}>Phường/Xã</label>
+            <label className={SenkoTheme.label}>Ward</label>
             <select
               className={SenkoTheme.select}
               value={selectedWard}
               onChange={handleWardChange}
               disabled={!editMode || !selectedDistrict}
             >
-              <option value="">Chọn phường/xã</option>
+              <option value="">Select Ward</option>
               {wards.map((w) => (
                 <option key={w.code} value={w.code}>
                   {w.name}
@@ -366,15 +365,15 @@ const UserInfo = ({ loading, setLoading }) => {
             </select>
           </div>
           <div className="md:col-span-2">
-            <label className={SenkoTheme.label}>Địa chỉ chi tiết</label>
+            <label className={SenkoTheme.label}>Address Detail</label>
             <input
               type="text"
-              name="addressDetail"
+              name="particular"
               className={SenkoTheme.input}
               value={userInfo?.particular || ""}
               onChange={handleChange}
               disabled={!editMode}
-              placeholder="Số nhà, tên đường, tòa nhà, v.v."
+              placeholder="House number, street name, building, etc."
             />
           </div>
           {editMode && (

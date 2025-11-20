@@ -56,4 +56,7 @@ public class Users {
                 phoneNum == null || phoneNum.trim().isEmpty() ||
                 address == null || address.isAddressValid();
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<Feedback> feedbackList;
 }
