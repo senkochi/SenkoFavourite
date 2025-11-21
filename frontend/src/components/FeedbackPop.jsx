@@ -10,6 +10,12 @@ const FeedbackPop = ({ id, address = "" }) => {
   const [order, setOrder] = React.useState([]);
   const [reviews, setReviews] = React.useState({});
 
+  const initReviews = (items = []) =>
+    items.reduce((acc, it) => {
+      if (!acc[it.productId]) acc[it.productId] = { rating: 5, comment: "" };
+      return acc;
+    }, {});
+
   const openModal = async () => {
     setOpen(true);
     setLoading(true);
@@ -17,6 +23,7 @@ const FeedbackPop = ({ id, address = "" }) => {
       const res = await axiosInstance.get(`/api/order/detail/${id}`);
       if (res?.status === 200 && res.data) {
         setOrder(res.data);
+        setReviews(initReviews(res.data));
       } else {
         addToast("Error fetching order details", "error");
       }
@@ -43,7 +50,8 @@ const FeedbackPop = ({ id, address = "" }) => {
     const items = order;
     const payload = items.map((it) => {
       const r = reviews[it.productId] ?? { rating: 5, comment: "" }; 
-      return { productId: it.productId, rating: r.rating, createdAt: "", content: (r.comment || "").trim(), user: null };
+      const rating = r.rating && r.rating >= 1 ? r.rating : 5;
+      return { productId: it.productId, rating: rating, createdAt: "", content: (r.comment || "").trim(), user: null };
     });
 
     setSubmitting(true);

@@ -55,13 +55,13 @@ public class UserOrder {
             this.orderDetails = new ArrayList<>();
         }
         this.orderDetails.add(detail);
-        detail.setOrder(this); // <-- ĐẶT MỐI QUAN HỆ Ở PHÍA SỞ HỮU
+        detail.setOrder(this);
     }
 
     public void removeOrderDetail(OrderDetail detail) {
         if (this.orderDetails != null) {
             this.orderDetails.remove(detail);
-            detail.setOrder(null); // <-- Gỡ bỏ mối quan hệ
+            detail.setOrder(null);
         }
     }
 

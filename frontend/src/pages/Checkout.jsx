@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
-import SenkoToast from "../components/SenkoToast";
+import { useToast } from "../context/ToastContext";
 
 const SenkoTheme = {
   main: "min-h-screen bg-gradient-to-br from-yellow-100 via-orange-100 to-pink-100 flex items-center justify-center font-content",
@@ -27,15 +27,10 @@ const Checkout = () => {
   const [success, setSuccess] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("VNPAY");
 
+  const { addToast } = useToast();
+
   const handlePaymentChange = (method) => setPaymentMethod(method);
-
-  const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
   
-    const showToast = (message, type = 'info') => {
-      setToast({ show: true, message, type });
-      setTimeout(() => setToast({ show: false, message: '', type }), 3000);
-    };
-
   const handleVnpayPayment = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -51,10 +46,10 @@ const Checkout = () => {
       if (response.data.url) {
         window.location.href = response.data.url;
       } else {
-        showToast(response.data.error, "error");
+        addToast(response.data.error, "error");
       }
     } catch (err) {
-      showToast("Không thể tạo thanh toán VNPAY. Vui lòng thử lại.", "error");
+      addToast("Cannot create VNPAY payment. Please try again.", "error");
     } finally {
       setLoading(false);
     }
@@ -76,7 +71,7 @@ const Checkout = () => {
         showToast(response.data.error, "error");
       }
     } catch (err) {
-      showToast(err.response.data.error, "error");
+      addToast(err.response.data.error, "error");
       console.error("Error creating order:", err);
     } finally {
       setLoading(false);
@@ -211,13 +206,6 @@ const Checkout = () => {
           </div>
         </div>
       </div>
-      {toast.show && (
-          <SenkoToast
-            message={toast.message}
-            type={toast.type}
-            onClose={() => setToast({ show: false, message: '', type: 'info' })}
-          />
-        )}
     </div>
   );
 };

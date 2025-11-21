@@ -5,12 +5,11 @@ import { formatDate } from '../../hook/dateProcess';
 import { useToast } from '../../context/ToastContext';
 
 const STATUS_OPTIONS = [
-  "COD",
-  "VNPAY",
+  "PENDING",
   "CONFIRMED",
   "DELIVERING",
   "DELIVERED",
-  "CANCELED"
+  "CANCELLED"
 ];
 
 const Order = () => {
@@ -26,7 +25,7 @@ const Order = () => {
         setOrders(response.data);
       } catch (error) {
         console.error('Error fetching order details:', error);
-        addToast('Lỗi khi tải dữ liệu đơn hàng', 'error');
+        addToast('Error fetching order details', 'error');
       }
     };
 
@@ -37,12 +36,12 @@ const Order = () => {
     const updated = [...orders];
     updated[idx].status = newStatus;
     setOrders(updated);
-    console.log('Cập nhật trạng thái đơn hàng:', updated[idx]);
+    console.log('Updating order status:', updated[idx]);
     const response = await axiosInstance.put(`/api/order/admin/update-status?orderId=${updated[idx].orderId}&status=${newStatus}`,
       { headers: { 'Content-Type': 'application/json' } }
     );
     if (response.status === 200) {
-      console.log('Cập nhật trạng thái thành công');
+      console.log('Order status updated successfully');
       addToast('Order status updated successfully', 'success');
     }
     else {
@@ -67,12 +66,12 @@ const Order = () => {
         <table className="min-w-[700px] w-full bg-white rounded-xl shadow border border-orange-200 overflow-y-auto">
           <thead>
             <tr className="bg-yellow-100 text-orange-700 text-lg">
-              <th className="py-3 px-6">Mã đơn</th>
-              <th className="py-3 px-6">Khách hàng</th>
-              <th className="py-3 px-6">Ngày đặt</th>
-              <th className="py-3 px-6">Tổng tiền</th>
-              <th className="py-3 px-6">Trạng thái</th>
-              <th className="py-3 px-6">Thao tác</th>
+              <th className="py-3 px-6">Order ID</th>
+              <th className="py-3 px-6">Customer</th>
+              <th className="py-3 px-6">Order Date</th>
+              <th className="py-3 px-6">Total</th>
+              <th className="py-3 px-6">Status</th>
+              <th className="py-3 px-6">Actions</th>
             </tr>
           </thead>
           <tbody>

@@ -2,17 +2,22 @@ package com.senko.SenkoFavourite.service;
 
 import com.senko.SenkoFavourite.dto.OrderDTO;
 import com.senko.SenkoFavourite.dto.OrderDetailDTO;
+import com.senko.SenkoFavourite.exception.types.InvalidStatus;
 import com.senko.SenkoFavourite.exception.types.NotFoundException;
 import com.senko.SenkoFavourite.model.*;
 import com.senko.SenkoFavourite.model.enums.OrderStatus;
 import com.senko.SenkoFavourite.model.enums.PaymentMethod;
 import com.senko.SenkoFavourite.repository.*;
 import jakarta.transaction.Transactional;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -126,9 +131,39 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
     public UserOrder updateOrderStatus(int orderId, String status){
         UserOrder order = orderRepository.findByOrderId(orderId);
-        order.setStatus(OrderStatus.valueOf(status));
+        if (order == null) throw new NotFoundException("Order not found");
+
+        OrderStatus newStatus;
+        try {
+            newStatus = OrderStatus.valueOf(status);
+        } catch (Exception ex) {
+            throw new InvalidStatus("Invalid status: " + status);
+        }
+
+        OrderStatus prevStatus = order.getStatus();
+        if(newStatus == prevStatus) { return order; }
+
+        if (newStatus == OrderStatus.CANCELLED){
+            List<Integer> productIds = order.getOrderDetails().stream().map(orderDetail -> {
+                return orderDetail.getProduct().getProductId();
+            }).toList();
+
+            Map<Integer, Integer> productReturnStock = order.getOrderDetails().stream()
+                    .collect(Collectors.toMap(od -> od.getProduct().getProductId(), OrderDetail::getQuantity));
+
+            if(!productReturnStock.isEmpty()){
+                List<Product> products = productRepository.findByProductIds(new ArrayList<>(productReturnStock.keySet()));
+                for(Product p : products){
+                    Integer add = productReturnStock.get(p.getProductId());
+                    p.setQuantity(add + p.getQuantity());
+                }
+                productRepository.saveAll(products);
+            }
+        }
+        order.setStatus(newStatus);
         return orderRepository.save(order);
     }
 
