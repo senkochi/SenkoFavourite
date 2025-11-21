@@ -107,7 +107,7 @@ const ProductDetails = () => {
   if (!product)
     return <div className="text-center mt-10">Đang tải sản phẩm...</div>;
   return (
-    <div className="flex page-container font-content justify-center">
+    <div className="flex page-container font-content justify-center mt-10">
       <div className="w-[1200px]">
         <div className="flex md:flex-row flex-col items-center md:items-start gap-8 md:mx-10 mx-5 mt-5">
           <div>

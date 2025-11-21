@@ -16,6 +16,6 @@ public interface OrderRepository extends JpaRepository<UserOrder, Integer> {
     List<UserOrder> findAllByOrderByCreatedAtDesc();
     void deleteByOrderId(int orderId);
 
-    @Query("SELECT COUNT(o) FROM UserOrder o WHERE o.status IN ('COD', 'VNPAY')")
+    @Query("SELECT COUNT(o) FROM UserOrder o WHERE o.status = 'PENDING'")
     long getOrderNumber();
 }

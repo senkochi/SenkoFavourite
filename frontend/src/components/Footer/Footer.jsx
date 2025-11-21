@@ -30,7 +30,7 @@ const Footer = () => {
             <li>
               <a href="/blog">Blogs</a>
             </li>
-            <li>
+            <li>  
               <a href="/gallery">Gallery</a>
             </li>
           </ul>

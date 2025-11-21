@@ -11,6 +11,7 @@ import com.senko.SenkoFavourite.repository.AddressRepository;
 import com.senko.SenkoFavourite.repository.OrderRepository;
 import com.senko.SenkoFavourite.repository.ProductRepository;
 import com.senko.SenkoFavourite.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class VNPayService {
         Users user = userRepository.findByUsername(username);
         Address address = addressRepository.findByUser(user).orElse(null);
 
-        if(user.canOrder()){
+        if(!user.canOrder()){
             throw new Exception("Please check your fullname, phone number or address!");
         }
 
@@ -51,15 +52,18 @@ public class VNPayService {
                 .user(user)
                 .createdAt(LocalDateTime.now())
                 .total(0)
-                .status(OrderStatus.VNPAY)
+                .status(OrderStatus.PENDING)
                 .paymentMethod(PaymentMethod.VNPAY)
                 .address(address.toString())
+                .reviewed(false)
                 .build();
 
         double totalAmount = 0;
 
         for(OrderDetailDTO detail : orderInfo.getOrderDetailList()){
             Product product = productRepository.findByProductId(detail.getProductId()).orElseThrow(() -> new NotFoundException("Product not found"));
+            product.setQuantity(product.getQuantity() - detail.getQuantity());
+            productRepository.save(product);
             OrderDetail orderDetail = OrderDetail.builder()
                     .product(product)
                     .quantity(detail.getQuantity())
@@ -84,8 +88,8 @@ public class VNPayService {
         vnp_Params.put("vnp_ReturnUrl", vnPayConfig.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", orderInfo.getIpAddr());
 
-        System.out.println("ccc" + vnPayConfig.vnp_TmnCode);
-        System.out.println("cccfffff" + vnPayConfig.secretKey);
+        System.out.println(vnPayConfig.vnp_TmnCode);
+        System.out.println(vnPayConfig.secretKey);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));

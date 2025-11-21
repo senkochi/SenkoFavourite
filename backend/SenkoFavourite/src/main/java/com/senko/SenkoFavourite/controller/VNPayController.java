@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -84,7 +81,7 @@ public class VNPayController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found!");
             }
             if (vnp_TransactionStatus.equals("00")){
-                order.setStatus(OrderStatus.VNPAY);
+                order.setStatus(OrderStatus.PENDING);
                 orderService.saveOrder(order);
                 System.out.println("Order cancelled");
                 return ResponseEntity.ok("Success");
@@ -97,5 +94,60 @@ public class VNPayController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid signature");
         }
+    }
+
+    @GetMapping("/return-confirm")
+    public ResponseEntity<?> returnConfirm(HttpServletRequest request){
+        Map<String,String> fields = new HashMap<>();
+        request.getParameterMap().forEach((k,v)-> {
+            if(k.startsWith("vnp_")) fields.put(k, v[0]);
+        });
+        String incomingHash = fields.remove("vnp_SecureHash");
+        String txnRef = fields.get("vnp_TxnRef");
+        String responseCode = fields.getOrDefault("vnp_ResponseCode", fields.get("vnp_TransactionStatus"));
+
+        if(txnRef == null) return ResponseEntity.badRequest().body("missing txnRef");
+
+        UserOrder order = orderService.getOrderByOrderId(Integer.parseInt(txnRef));
+        if(order == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("order not found");
+
+        if(order.getStatus() == OrderStatus.CANCELLED)
+            return ResponseEntity.ok().build();
+
+        String hashData = buildHashData(fields); // giống lúc tạo URL
+        String computed = vnPayConfig.hmacSHA512(vnPayConfig.secretKey, hashData);
+
+        if(incomingHash == null || !incomingHash.equals(computed)){
+            orderService.updateOrderStatus(order.getOrderId(), "CANCELLED");
+            System.out.println("[VNPay Return] signature invalid -> CANCELLED order=" + txnRef);
+            return ResponseEntity.ok("cancelled (invalid signature)");
+        }
+
+
+        if("00".equals(responseCode)){
+            order.setStatus(OrderStatus.PENDING); // hoặc PAID
+            orderService.saveOrder(order);
+            System.out.println("[VNPay Return] success order=" + txnRef);
+            return ResponseEntity.ok("success");
+        } else {
+            orderService.updateOrderStatus(order.getOrderId(), "CANCELLED");
+            System.out.println("[VNPay Return] failure code=" + responseCode + " order=" + txnRef);
+            return ResponseEntity.ok("cancelled code=" + responseCode);
+        }
+    }
+
+    private String buildHashData(Map<String,String> fields){
+        List<String> keys = new ArrayList<>(fields.keySet());
+        Collections.sort(keys);
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<keys.size();i++){
+            String k = keys.get(i);
+            String v = fields.get(k);
+            if(v != null && !v.isEmpty()){
+                sb.append(k).append("=").append(v);
+                if(i < keys.size()-1) sb.append("&");
+            }
+        }
+        return sb.toString();
     }
 }

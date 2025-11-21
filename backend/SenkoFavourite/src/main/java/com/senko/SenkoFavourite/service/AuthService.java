@@ -31,6 +31,9 @@ public class AuthService {
 
     public Users register(RegisterRequestDTO registerRequest){
         registerRequest.setPassword(encoder.encode(registerRequest.getPassword()));
+        if(registerRequest.getEmail() == null || registerRequest.getEmail().isEmpty()){
+
+        }
         Users user = Users.builder()
                 .username(registerRequest.getUsername())
                 .password(registerRequest.getPassword())

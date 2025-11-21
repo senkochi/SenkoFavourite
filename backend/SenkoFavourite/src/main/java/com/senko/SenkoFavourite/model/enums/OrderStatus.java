@@ -1,8 +1,7 @@
 package com.senko.SenkoFavourite.model.enums;
 
 public enum OrderStatus {
-    COD("COD"),
-    VNPAY("VNPAY"),
+    PENDING("PENDING"),
     CONFIRMED("CONFIRMED"),
     DELIVERING("DELIVERING"),
     DELIVERED("DELIVERED"),
